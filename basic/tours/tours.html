@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tourist Agency - Explore the World</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="tours.css">
+</head>
+
+<body>
+  <header class="bg-dark text-white text-center py-3" style="box-shadow:gray;" id="change">
+    <h1>Explore the World with Our Tours</h1>
+  </header>
+  <main style="  
+  height: 100vh;
+  background-image: url('../img/529051-Thailand-Bay-Ocean-Boat-Rocks-Mountains-ao-nang.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;">
+    <section id="preferences" class="text-center">
+      <h2>User Preferences</h2>
+
+      <div id="auth" class="mx-auto mt-3 flex-column" style="width: 25%;">
+        <input type="text" id="username" class="form-control mb-2" placeholder="Username" />
+        <input type="password" id="password" class="form-control mb-2" placeholder="password" />
+        <button id="login-btn" class="btn btn-primary" style=" 
+            margin: 0 auto;
+            width: 20%;">Login</button>
+
+        <button id="reg-btn" class="btn btn-danger" style="
+            margin: 0 auto;
+            display:block;">Registration</button>
+
+        <span id="reg-error" style="color: red; display: none;"> Invalid data </span>
+      </div>
+
+      <div id="user-panel" style="
+      margin: 0 auto;
+      display: none;
+      justify-content: center;
+      max-width: 50%;
+      ">
+        <div style="
+            display: flex;
+            margin: 0 auto;
+            justify-content: space-between;
+            width: 45%;
+            ">
+
+          <div style="display: flex;">
+            <img src="../img/p.png" alt="" style="
+                width: 35%;
+                border-radius: 50%;
+                object-fit: cover;
+
+                ">
+            <div id="user-name" style="
+                margin: auto 5px;
+                font-size: 125%;
+                "></div>
+          </div>
+          <button id="logout-btn" class="btn btn-danger" style="display:none;">Logout</button>
+        </div>
+      </div>
+
+      <label for="mode">Select Mode:</label>
+      <select id="mode" class="form-control w-25 mx-auto">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+
+      <label for="sort">Sort By:</label>
+      <select id="sort" class="form-control w-25 mb-3 mx-auto">
+        <option value="alphabetical">Alphabetical</option>
+        <option value="price">Price</option>
+      </select>
+    </section>
+
+    <section id="tours" class="container my-4">
+      <h2 style="color: white;">Our Tours</h2>
+      <div id="tour-list" class="row"></div>
+    </section>
+
+  </main>
+  <footer class="text-center py-3 bg-dark text-white" id="change">
+  </footer>
+
+  <script src="tours.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

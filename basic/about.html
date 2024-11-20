@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offers</title>
+  <link rel="stylesheet" href="./about.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<header>
+  <div class="header__row">
+    <h1 style="font-weight: bold; color: white;">MNTN</h1>
+    <div class="header-buttons" id="profile__content">
+      <button id="loginButton" class="header-button">Login</button>
+      <button id="themeToggle" class="header-button">Toggle Theme</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="mt-5">
+    <!-- Bootstrap Carousel -->
+    <div id="tourCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#tourCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#tourCarousel" data-slide-to="1"></li>
+        <li data-target="#tourCarousel" data-slide-to="2"></li>
+        <li data-target="#tourCarousel" data-slide-to="3"></li>
+      </ol>
+
+      <!-- Carousel Inner -->
+      <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+          <img src="./img/tour1.jpg" class="d-block w-100" alt="Tour 1">
+          <div class="carousel-caption d-flex justify-content-center align-items-center">
+            <div class="caption-content">
+              <h5>Adventure in the Alps</h5>
+              <p>Experience the breathtaking views of the Alps on this adventurous tour!</p>
+              <span class="price">$1,200</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+          <img src="./img/tour2.jpg" class="d-block w-100" alt="Tour 2">
+          <div class="carousel-caption d-flex justify-content-center align-items-center">
+            <div class="caption-content">
+              <h5>Tropical Paradise</h5>
+              <p>Relax on the beautiful beaches of the Caribbean and enjoy a tropical escape.</p>
+              <span class="price">$1,500</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+          <img src="./img/tour3.jpg" class="d-block w-100" alt="Tour 3">
+          <div class="carousel-caption d-flex justify-content-center align-items-center">
+            <div class="caption-content">
+              <h5>Cultural Tour in Japan</h5>
+              <p>Explore the culture and history of Japan, from temples to high-tech cities.</p>
+              <span class="price">$2,000</span>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 4 -->
+        <div class="carousel-item">
+          <img src="./img/tour4.jpg" class="d-block w-100" alt="Tour 4">
+          <div class="carousel-caption d-flex justify-content-center align-items-center">
+            <div class="caption-content">
+              <h5>Safari in Kenya</h5>
+              <p>Witness the wildlife of Africa up close with an unforgettable safari adventure.</p>
+              <span class="price">$3,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel Controls -->
+      <a class="carousel-control-prev" href="#tourCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#tourCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="main__cotntent">
+
+
+    <div class="offers" tabindex="0">
+        <div class="offers__content">
+            <div class="offers__header">
+                <h4>Exclusive Offers</h4>
+            </div>
+            <div class="offers__tabs">
+                <div id="cruiseButton" class="tabs__button">Cruises</div>
+                <div id="flightsButton" class="tabs__button">Flights</div>
+                <div id="toursButton" class="tabs__button">Tours</div>
+            </div>
+            <div id="offerContent" class="offers__list">
+                <h2>Select a category to view offers</h2>
+            </div>
+        </div>
+        <img id="offerThumbnail"   class="offers__image" src="./img/thumb1.jpg" alt="">
+      </div>
+
+      <section class="reverse options">
+        <div class="option">
+        
+          <div class="options__content" id="review1">
+            <div class="options__title">Kira Nightly</div>
+            <div class="options__rating">⭐⭐⭐⭐⭐</div>
+            <div class="options__text">
+              "This was the best vacation I've ever had! The place was just stunning, and the locals were incredibly welcoming. I had so many wonderful experiences, from sightseeing to relaxing by the beach. I highly recommend this destination to anyone looking for a perfect mix of adventure and relaxation. I can’t wait to come back!"
+            </div>
+          </div>
+          <div class="options__image">
+            <img class="option__image" src="./img/person1.jpg" alt="Review image">
+          </div>
+        </div>
+      
+        <div class="option__middle">
+          <div class="options__content" id="review2" style="text-align:right;">
+            <div class="options__title">Sam Willson</div>
+            <div class="options__rating">⭐⭐⭐⭐</div>
+            <div class="options__text">
+              "I recently went hiking, and the gear I used was a lifesaver! Everything was high quality and durable, making the whole experience so much more enjoyable. I just wish the weather had been a bit more predictable! Make sure to pack for all types of weather – it can change quickly out there. Still, overall, I was super impressed!"
+            </div>
+          </div>
+          <div class="options__image">
+            <img class="option__image" src="./img/person2.jpg" alt="Review image">
+          </div>
+        </div>
+      
+        <div class="option">
+          <div class="options__content" id="review3">
+            <div class="options__title">John Doe</div>
+            <div class="options__rating">⭐⭐⭐⭐⭐</div>
+            <div class="options__text">
+              "I can’t stress enough how important it is to research your destination before traveling. It made all the difference in my trip! I took the time to understand the area, the activities available, and the best times to visit, which allowed me to enjoy everything to the fullest. It’s the little things that can make or break your experience. This was definitely the highlight of my travel adventures!"
+            </div>
+          </div>
+          <div class="options__image">
+            <img class="option__image"  src="./img/person3.jpg" alt="Review image">
+          </div>
+        </div>
+      </section>
+
+
+      
+</main>
+
+<footer style="color: white; background-color: #071218;">
+
+  <div id="fact-container">
+    <div class="fact__text" style="color: white; font-weight: bold;">
+
+      Funny Fact 
+    </div>
+    <p id="fact" style="color: white;"></p>
+</div>
+  Daniyar Maratovich IT-2309
+</footer>
+
+<div id="signupPopup" class="popup" style="display: none;">
+  <div class="popup-content">
+    <span id="closeSignup" class="close-button">&times;</span>
+    <h2>Input Your Data</h2>
+    <form id="signupForm">
+      <label for="signupUsername">Username:</label>
+      <input type="text" id="signupUsername" name="username" required>
+      
+      <label for="signupEmail">Email:</label>
+      <input type="email" id="signupEmail" name="email" required>
+      <div id="emailError" class="error-message"></div>
+
+      <label for="signupPassword">Password:</label>
+      <input type="password" id="signupPassword" name="password" required>
+      <div id="passwordError" class="error-message"></div>
+
+      <button id="signupButton" type="submit">Sign Up</button>
+    </form>
+  </div>
+</div>
+
+<div id="loginPopup" class="popup" style="display: none;">
+  <div class="popup-content">
+    <span id="closeLogin" class="close-button">&times;</span>
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginEmail">Email:</label>
+      <input type="email" id="loginEmail" name="email" required>
+
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" name="password" required>
+      <div id="loginError" class="error-message"></div>
+
+      <button id="loginButton" type="submit">Login</button>
+      <button id="signupToggle">Sign Up</button>
+    </form>
+  </div>
+</div>
+
+</div>
+<script type="module" src="script.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+<script>
+  const userData = JSON.parse(localStorage.getItem('loggedUser'));
+
+  if(userData){
+    document.getElementById("profile__content").innerHTML = `
+    <div class="header-buttons" style="color:white">
+      <button id="themeToggle" class="header-button">Toggle Theme</button>
+      <div class="header__info">
+        <a class ="info__name"href="./profile.html">
+          ${ userData.username}
+          </a>
+  <div class="info__email">
+    ${ userData.email}
+  </div>
+    </div>
+
+    `
+  
+  }
+  
+
+</script>
+</html>

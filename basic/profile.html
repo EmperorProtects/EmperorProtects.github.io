@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="./about.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<header>
+  <div class="header__row">
+    <h1 style="font-weight: bold; color: white;">MNTN</h1>
+    <div class="header-buttons">
+      <button id="themeToggle" class="header-button">Toggle Theme</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="profile-page">
+    <div class="profile-info">
+      <h3>Profile Information</h3>
+      <p id="profileName"></p>
+      <p id="profileEmail"></p>
+      <p id="profilePhone"></p>
+    </div>
+
+    <button id="logoutButton" class="header-button">Log Out</button>
+  </div>
+</main>
+
+<footer>
+  Daniyar Maratovich IT-2309
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const userData = JSON.parse(localStorage.getItem('loggedUser')); // Retrieve logged user data from localStorage
+
+  if (userData) {
+    // Display user profile data
+    document.getElementById('profileName').textContent = `Username: ${userData.username}`;
+    document.getElementById('profileEmail').textContent = `Email: ${userData.email}`;
+  } else {
+    // If no user data is found, show an alert and redirect to signup page
+    alert("No user data found. Please sign up or log in.");
+    window.location.href = './login.html'; // Redirect to login page if no data found
+  }
+});
+
+// Log out functionality
+document.getElementById('logoutButton').addEventListener('click', function () {
+  localStorage.removeItem('logged'); // Remove user data from localStorage when logging out
+  window.location.href = './about.html'; // Redirect to login page after logout
+});
+</script>
+
+</body>
+</html>
