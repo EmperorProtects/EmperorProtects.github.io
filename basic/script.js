@@ -1,6 +1,5 @@
-import offers from './offers.js'; // Importing the offers module
+import offers from './offers.js'; 
 
-// Function to return HTML for a specific category
 function getOffersHTML(category) {
   let html = '';
   switch (category) {
@@ -53,7 +52,6 @@ function getOffersHTML(category) {
   return html;
 }
 
-// Function to update the content and thumbnail based on category
 function updateOffers(category, thumbnailSrc) {
   const offersContainer = document.getElementById('offerContent');
   offersContainer.innerHTML = getOffersHTML(category);
@@ -61,7 +59,6 @@ function updateOffers(category, thumbnailSrc) {
   offerThumbnail.src = thumbnailSrc;
 }
 
-// Event Listeners for Category Buttons
 document.getElementById('cruiseButton').addEventListener('click', () => {
   updateOffers('cruises', './img/thumb2.jpg');
 });
@@ -74,7 +71,6 @@ document.getElementById('flightsButton').addEventListener('click', () => {
   updateOffers('flights', './img/thumb1.jpg');
 });
 
-// Light/Dark Mode Toggle
 const toggleThemeButton = document.getElementById('themeToggle');
 toggleThemeButton.addEventListener('click', () => {
   const htmlElement = document.querySelector('html');
@@ -87,8 +83,6 @@ toggleThemeButton.addEventListener('click', () => {
   }
 });
 
-// Get DOM elements
-// const loginButton = document.getElementById('loginButton');
 const signupButton = document.getElementById('signupButton');
 const signupToggle = document.getElementById('signupToggle');
 const signupPopup = document.getElementById('signupPopup');
@@ -104,30 +98,25 @@ const emailError = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
 const loginError = document.getElementById('loginError');
 
-// Open Sign Up Popup
 signupToggle.addEventListener('click', function () {
   loginPopup.style.display = 'none';
   signupPopup.style.display = 'block';
 });
 
-// Close Sign Up Popup
 closeSignup.addEventListener('click', function () {
   signupPopup.style.display = 'none';
 });
 
-// Close Login Popup
 closeLogin.addEventListener('click', function () {
   loginPopup.style.display = 'none';
 });
 
-// Open Login Popup
 
 const loginButton = document.getElementById('loginButton');
 loginButton.addEventListener('click', function() {
     loginPopup.style.display = 'block'; // Open login popup
     signupPopup.style.display = 'none'; // Close sign-up popup if it's open
 });
-// Sign Up Form Submission
 signupForm.addEventListener('submit', function (event) {
   event.preventDefault();
   const username = document.getElementById('signupUsername').value.trim();
@@ -150,12 +139,10 @@ loginForm.addEventListener('submit', function (event) {
   }
 });
 
-// Sign Up Form Validation
 function validateSignupForm(username, email, password) {
   emailError.textContent = '';
   passwordError.textContent = '';
   
-  // Email validation
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailPattern.test(email)) {
     emailError.textContent = 'Please enter a valid email address.';
