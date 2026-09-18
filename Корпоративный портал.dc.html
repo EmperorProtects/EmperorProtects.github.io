@@ -1,0 +1,2073 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="_ds/broadsheet-911dfa06-7b9e-4096-a9a4-9848c09bd87a/styles.css" />
+<script src="_ds/broadsheet-911dfa06-7b9e-4096-a9a4-9848c09bd87a/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css" />
+<style>
+  body { margin: 0; background: #f3f2f2; color: #201e1d; font-family: 'Source Serif 4', Georgia, serif; }
+  * { box-sizing: border-box; }
+  a { color: #006786; text-decoration: none; }
+  a:hover { color: #0088b0; text-decoration: underline; }
+  button { font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
+  :focus-visible { outline: 2px solid #0088b0; outline-offset: 2px; }
+  ::selection { background: rgba(0,136,176,.3); }
+</style>
+</helmet>
+
+<div style="height:100vh; overflow:hidden; background:#f3f2f2; color:#201e1d; font-family:'Source Serif 4', Georgia, serif">
+<div style="{{ shellStyle }}">
+
+  <header style="flex:none; padding:14px 26px 0">
+    <div style="height:5px; background:#201e1d"></div>
+    <div style="display:flex; align-items:flex-end; gap:24px; padding:12px 0 10px; flex-wrap:wrap">
+      <div>
+        <div style="font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:#605d5d">{{ t.org }}</div>
+        <div style="font-weight:600; font-size:31px; letter-spacing:.01em; line-height:1.04">{{ t.brand }}</div>
+      </div>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:14px">
+        <label style="display:flex; align-items:center; gap:7px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; padding:7px 10px; min-width:230px">
+          <i class="ph-duotone ph-magnifying-glass" style="font-size:16px; color:#605d5d"></i>
+          <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="{{ t.search }}" style="border:0; background:transparent; font-size:14px; color:#201e1d; width:100%; outline:none" />
+        </label>
+        <div style="display:flex; border:1px solid rgba(32,30,29,.16); border-radius:2px; overflow:hidden">
+          <button onClick="{{ setRu }}" style="{{ ruBtn }}">РУС</button>
+          <button onClick="{{ setKz }}" style="{{ kzBtn }}">ҚАЗ</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; border-left:1px solid rgba(32,30,29,.16); padding-left:14px">
+          <button onClick="{{ cycleScale }}" title="{{ t.a11y_font }}" style="{{ scaleBtn }}">Аа</button>
+          <button onClick="{{ toggleMono }}" title="{{ t.a11y_mono }}" style="{{ monoBtn }}">◐</button>
+        </div>
+        <button onClick="{{ toggleNotif }}" style="{{ bellBtn }}">
+          <i class="ph-duotone ph-bell" style="font-size:20px"></i>
+          <span style="position:absolute; top:-2px; right:-4px; min-width:17px; height:17px; padding:0 4px; background:#d6006c; color:#f3f2f2; font-size:10px; font-weight:600; border-radius:9px; display:grid; place-items:center">{{ notifCount }}</span>
+        </button>
+        <div style="display:flex; align-items:center; gap:9px; padding-left:4px">
+          <div style="width:34px; height:34px; border-radius:2px; background:repeating-linear-gradient(135deg,#d7d3d3 0 3px,#eae9e9 3px 6px)"></div>
+          <div style="line-height:1.25">
+            <div style="font-size:13px; font-weight:600">{{ me.short }}</div>
+            <div style="font-size:11px; color:#605d5d">{{ me.rank }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:1px; background:#201e1d"></div>
+    <div style="display:flex; align-items:center; gap:18px; padding:8px 0; font-size:12px; color:#605d5d; flex-wrap:wrap">
+      <span>{{ t.dateline }}</span>
+      <span style="display:flex; align-items:center; gap:8px">
+        <span style="text-transform:uppercase; letter-spacing:.12em; font-size:10px">{{ t.role }}</span>
+        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="3">
+          <button onClick="{{ r.pick }}" style="{{ r.style }}">{{ r.label }}</button>
+        </sc-for>
+      </span>
+      <span style="margin-left:auto; display:flex; align-items:center; gap:7px">
+        <span style="width:7px; height:7px; background:#d6006c; border-radius:50%"></span>
+        <span>{{ t.ecp_line }}</span>
+      </span>
+      <span style="display:flex; align-items:center; gap:6px"><i class="ph-duotone ph-wifi-high" style="font-size:14px"></i>{{ t.net_line }}</span>
+    </div>
+    <div style="height:1px; background:rgba(32,30,29,.16)"></div>
+  </header>
+
+  <div style="flex:1; display:flex; min-height:0">
+    <nav style="flex:none; width:238px; padding:22px 18px 30px 26px; overflow:auto">
+      <div style="font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:#7d7979; padding:0 0 10px 12px">{{ t.sections }}</div>
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="7">
+        <button onClick="{{ n.go }}" style="{{ n.style }}">
+          <span style="{{ n.bar }}"></span>
+          <i class="ph-duotone {{ n.icon }}" style="font-size:19px; flex:none"></i>
+          <span style="flex:1; text-align:left">{{ n.label }}</span>
+          <span style="{{ n.badgeStyle }}">{{ n.badge }}</span>
+        </button>
+      </sc-for>
+      <div style="margin-top:26px; padding:0 12px">
+        <div style="font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:#7d7979; padding-bottom:9px">{{ t.help }}</div>
+        <div style="font-size:12px; color:#605d5d; line-height:1.5">{{ t.support }}</div>
+        <div style="font-size:12px; margin-top:6px"><a href="#">{{ t.instruction }}</a></div>
+      </div>
+    </nav>
+
+    <main style="flex:1; min-width:0; overflow:auto; padding:24px 30px 48px">
+
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Личный кабинет">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600; letter-spacing:.01em">{{ t.title_dashboard }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.dash_sub }}</span>
+        </div>
+
+        <div style="display:flex; gap:26px; margin-top:22px; flex-wrap:wrap; align-items:flex-start">
+          <div style="flex:1 1 380px; display:flex; gap:18px; background:#eae9e9; border-radius:2px; padding:18px">
+            <div style="flex:none; width:104px">
+              <div style="height:126px; border-radius:2px; background:repeating-linear-gradient(135deg,#d7d3d3 0 3px,#eae9e9 3px 6px); display:grid; place-items:end center; padding-bottom:7px">
+                <span style="font-family:ui-monospace,monospace; font-size:8px; color:#444141; background:#f3f2f2; padding:2px 4px">фото 3×4</span>
+              </div>
+            </div>
+            <div style="flex:1; min-width:0">
+              <div style="font-size:21px; font-weight:600; line-height:1.15">{{ me.name }}</div>
+              <div style="font-size:13px; color:#605d5d; margin-top:2px">{{ me.rank }} · {{ me.id }}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px 18px; margin-top:14px; font-size:13px">
+                <div><div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.position }}</div>{{ me.position }}</div>
+                <div><div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.dept }}</div>{{ me.dept }}</div>
+                <div><div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.tenure }}</div>{{ me.tenure }}</div>
+                <div><div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.phone }}</div>{{ me.phone }}</div>
+              </div>
+              <sc-if value="{{ showRating }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(32,30,29,.12)">
+                  <div style="display:flex; align-items:baseline; gap:10px">
+                    <span style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.rating }}</span>
+                    <span style="font-size:23px; font-weight:600; color:#006786">{{ me.rating }}</span>
+                    <span style="font-size:12px; color:#605d5d">/ 100 · {{ t.rating_note }}</span>
+                  </div>
+                  <div style="display:flex; gap:3px; margin-top:8px">
+                    <sc-for list="{{ ratingSegs }}" as="s" hint-placeholder-count="10">
+                      <span style="{{ s.style }}"></span>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="flex:1 1 300px; max-width:420px">
+            <div style="background:#fff1f4; border-radius:2px; padding:15px 16px; display:flex; gap:12px">
+              <i class="ph-duotone ph-seal-warning" style="font-size:24px; color:#aa0b56; flex:none"></i>
+              <div>
+                <div style="font-weight:600; font-size:14px; color:#790e3d">{{ t.ecp_title }}</div>
+                <div style="font-size:13px; color:#790e3d; line-height:1.45; margin-top:3px">{{ t.ecp_body }}</div>
+                <button onClick="{{ openSign }}" style="margin-top:10px; background:transparent; border:1px solid #aa0b56; color:#790e3d; font-size:13px; font-weight:600; padding:7px 13px; border-radius:2px; cursor:pointer">{{ t.ecp_check }}</button>
+              </div>
+            </div>
+            <div style="margin-top:16px">
+              <div style="font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#7d7979; padding-bottom:9px">{{ t.deadlines }}</div>
+              <sc-for list="{{ deadlines }}" as="d" hint-placeholder-count="4">
+                <div style="display:flex; align-items:baseline; gap:10px; padding:7px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                  <span style="flex:1; font-size:14px">{{ d.label }}</span>
+                  <span style="font-size:13px; color:#605d5d">{{ d.date }}</span>
+                  <span style="{{ d.style }}">{{ d.left }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:26px; margin-top:34px">
+          <div>
+            <div style="display:flex; align-items:baseline; gap:10px; border-bottom:2px solid #201e1d; padding-bottom:7px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.block_rapports }}</h2>
+              <button onClick="{{ goRapports }}" style="margin-left:auto; background:transparent; border:0; color:#006786; font-size:13px; cursor:pointer; padding:0">{{ t.all_link }}</button>
+            </div>
+            <sc-for list="{{ myRapports }}" as="r" hint-placeholder-count="4">
+              <div style="padding:11px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                <div style="display:flex; align-items:baseline; gap:10px">
+                  <span style="flex:1; font-size:14px; line-height:1.35">{{ r.title }}</span>
+                  <span style="{{ r.stStyle }}"><span style="{{ r.dotStyle }}"></span>{{ r.stLabel }}</span>
+                </div>
+                <div style="font-size:12px; color:#605d5d; margin-top:3px">{{ r.num }} · {{ r.step }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div>
+            <div style="border-bottom:2px solid #201e1d; padding-bottom:7px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.block_vacations }}</h2>
+            </div>
+            <sc-for list="{{ vacations }}" as="v" hint-placeholder-count="3">
+              <div style="padding:11px 0; border-bottom:1px solid rgba(32,30,29,.08); display:flex; gap:12px; align-items:baseline">
+                <span style="font-size:14px; flex:1">{{ v.type }}</span>
+                <span style="font-size:13px; color:#444141">{{ v.period }}</span>
+                <span style="font-size:12px; color:#605d5d">{{ v.days }}</span>
+              </div>
+            </sc-for>
+            <div style="margin-top:12px; font-size:13px; color:#605d5d">{{ t.vac_balance }}</div>
+            <button onClick="{{ goNewRapport }}" style="margin-top:12px; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 15px; border-radius:2px; cursor:pointer">{{ t.new_vacation }}</button>
+          </div>
+
+          <div>
+            <div style="border-bottom:2px solid #201e1d; padding-bottom:7px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.block_courses }}</h2>
+            </div>
+            <sc-for list="{{ dashCourses }}" as="c" hint-placeholder-count="3">
+              <div style="padding:12px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                <div style="display:flex; gap:10px; align-items:baseline">
+                  <span style="font-size:14px; flex:1; line-height:1.35">{{ c.title }}</span>
+                  <span style="font-size:12px; color:#605d5d">{{ c.pct }}%</span>
+                </div>
+                <div style="height:5px; background:#d7d3d3; margin-top:7px; border-radius:1px">
+                  <div style="{{ c.barStyle }}"></div>
+                </div>
+              </div>
+            </sc-for>
+            <button onClick="{{ goAcademy }}" style="margin-top:12px; background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; font-weight:600; padding:9px 14px; border-radius:2px; cursor:pointer">{{ t.to_academy }}</button>
+          </div>
+        </div>
+
+        <sc-if value="{{ isChief }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:34px">
+            <div style="border-bottom:2px solid #201e1d; padding-bottom:7px; display:flex; align-items:baseline; gap:12px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.chief_queue }}</h2>
+              <span style="font-size:13px; color:#605d5d">{{ t.chief_queue_sub }}</span>
+            </div>
+            <sc-for list="{{ chiefQueue }}" as="q" hint-placeholder-count="4">
+              <div style="display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid rgba(32,30,29,.08); flex-wrap:wrap">
+                <span style="font-size:14px; flex:1 1 260px">{{ q.title }}</span>
+                <span style="font-size:13px; color:#444141">{{ q.author }}</span>
+                <span style="font-size:12px; color:#605d5d">{{ q.due }}</span>
+                <span style="display:flex; gap:7px">
+                  <button onClick="{{ q.approve }}" style="background:#0088b0; color:#f3f2f2; border:0; font-size:13px; font-weight:600; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.approve }}</button>
+                  <button onClick="{{ q.open }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.open }}</button>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isHr }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:34px">
+            <div style="border-bottom:2px solid #201e1d; padding-bottom:7px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.hr_summary }}</h2>
+            </div>
+            <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:4px">
+              <thead>
+                <tr>
+                  <th style="text-align:left; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#605d5d; font-weight:600; padding:9px 10px 9px 0">{{ t.col_dept }}</th>
+                  <th style="text-align:right; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#605d5d; font-weight:600; padding:9px 10px">{{ t.col_staff }}</th>
+                  <th style="text-align:right; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#605d5d; font-weight:600; padding:9px 10px">{{ t.col_rapports }}</th>
+                  <th style="text-align:right; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#605d5d; font-weight:600; padding:9px 10px">{{ t.col_antikor }}</th>
+                  <th style="text-align:right; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#605d5d; font-weight:600; padding:9px 0 9px 10px">{{ t.col_vvk }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ hrRows }}" as="h" hint-placeholder-count="5">
+                  <tr>
+                    <td style="padding:10px 10px 10px 0; border-top:1px solid rgba(32,30,29,.08)">{{ h.dept }}</td>
+                    <td style="padding:10px; border-top:1px solid rgba(32,30,29,.08); text-align:right">{{ h.staff }}</td>
+                    <td style="padding:10px; border-top:1px solid rgba(32,30,29,.08); text-align:right">{{ h.rapports }}</td>
+                    <td style="padding:10px; border-top:1px solid rgba(32,30,29,.08); text-align:right">{{ h.antikor }}</td>
+                    <td style="padding:10px 0 10px 10px; border-top:1px solid rgba(32,30,29,.08); text-align:right">{{ h.vvk }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <button style="margin-top:14px; background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; font-weight:600; padding:9px 14px; border-radius:2px; cursor:pointer"><i class="ph-duotone ph-file-xls" style="font-size:15px; vertical-align:-2px; margin-right:6px"></i>{{ t.export_xls }}</button>
+          </div>
+        </sc-if>
+
+        <div style="margin-top:34px">
+          <div style="border-bottom:2px solid #201e1d; padding-bottom:7px">
+            <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.block_news }}</h2>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px; margin-top:16px">
+            <sc-for list="{{ news }}" as="n" hint-placeholder-count="3">
+              <article>
+                <div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#006786">{{ n.kicker }}</div>
+                <h3 style="margin:5px 0 0; font-size:17px; font-weight:600; line-height:1.25; text-wrap:pretty">{{ n.title }}</h3>
+                <p style="margin:7px 0 0; font-size:13px; line-height:1.55; color:#444141">{{ n.body }}</p>
+                <div style="font-size:12px; color:#605d5d; margin-top:7px">{{ n.date }}</div>
+              </article>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isDocuments }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Документы">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_documents }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ docCountLine }}</span>
+          <button onClick="{{ goNewRapport }}" style="margin-left:auto; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 16px; border-radius:2px; cursor:pointer"><i class="ph-duotone ph-plus" style="font-size:15px; vertical-align:-2px; margin-right:6px"></i>{{ t.create }}</button>
+        </div>
+
+        <div style="display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; margin-top:18px">
+          <label style="font-size:12px; color:#605d5d">{{ t.group_by }}
+            <select value="{{ groupBy }}" onChange="{{ onGroup }}" style="display:block; margin-top:4px; min-height:34px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:5px 8px">
+              <option value="none">{{ t.group_none }}</option>
+              <option value="type">{{ t.group_type }}</option>
+              <option value="status">{{ t.group_status }}</option>
+              <option value="dept">{{ t.group_dept }}</option>
+            </select>
+          </label>
+          <label style="font-size:12px; color:#605d5d">{{ t.filter_status }}
+            <select value="{{ filterStatus }}" onChange="{{ onFilter }}" style="display:block; margin-top:4px; min-height:34px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:5px 8px">
+              <option value="all">{{ t.all }}</option>
+              <option value="draft">{{ t.st_draft }}</option>
+              <option value="review">{{ t.st_review }}</option>
+              <option value="signed">{{ t.st_signed }}</option>
+              <option value="rejected">{{ t.st_rejected }}</option>
+              <option value="executed">{{ t.st_executed }}</option>
+            </select>
+          </label>
+          <span style="font-size:12px; color:#605d5d; margin-left:auto">{{ t.table_hint }}</span>
+        </div>
+
+        <div style="display:flex; gap:26px; margin-top:16px; align-items:flex-start; flex-wrap:wrap">
+          <div style="flex:1 1 520px; min-width:0">
+            <div style="display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid rgba(32,30,29,.16)">
+              <sc-for list="{{ columns }}" as="c" hint-placeholder-count="5">
+                <button onClick="{{ c.sort }}" style="{{ c.thStyle }}">{{ c.label }} <span style="color:#0088b0">{{ c.arrow }}</span></button>
+              </sc-for>
+              <span style="flex:0 0 32px"></span>
+            </div>
+            <sc-for list="{{ docRows }}" as="r" hint-placeholder-count="8">
+              <div style="{{ r.trStyle }}">
+                <sc-if value="{{ r.isGroup }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#444141; font-weight:600">{{ r.label }}</span>
+                  <span style="font-size:11px; color:#7d7979; margin-left:8px">{{ r.count }}</span>
+                </sc-if>
+                <sc-if value="{{ r.isDoc }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex; align-items:center; gap:10px">
+                    <button onClick="{{ r.select }}" style="{{ r.titleStyle }}">
+                      <i class="ph-duotone {{ r.icon }}" style="font-size:19px; color:#006786; flex:none; margin-top:1px"></i>
+                      <span style="min-width:0">
+                        <span style="display:block; font-size:14px; line-height:1.3; font-weight:{{ r.weight }}">{{ r.title }}</span>
+                        <span style="display:block; font-size:12px; color:#605d5d; margin-top:2px">{{ r.num }} · {{ r.type }}</span>
+                      </span>
+                    </button>
+                    <button onMouseEnter="{{ r.hoverIn }}" onMouseLeave="{{ hoverOut }}" style="{{ r.authorStyle }}">{{ r.author }}</button>
+                    <span style="{{ r.verStyle }}">{{ r.ver }}</span>
+                    <span style="{{ r.stStyle }}"><span style="{{ r.dotStyle }}"></span>{{ r.stLabel }}</span>
+                    <span style="{{ r.dateStyle }}">{{ r.date }}</span>
+                    <button onClick="{{ r.select }}" title="{{ t.open }}" style="flex:0 0 32px; width:32px; height:32px; background:transparent; border:1px solid rgba(32,30,29,.16); border-radius:2px; cursor:pointer; color:#201e1d"><i class="ph-duotone ph-eye" style="font-size:16px"></i></button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <aside style="flex:1 1 420px; min-width:340px; background:#eae9e9; border-radius:2px; padding:18px">
+            <div style="display:flex; align-items:flex-start; gap:12px">
+              <div style="flex:1; min-width:0">
+                <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#006786">{{ sel.num }} · {{ sel.type }}</div>
+                <h2 style="margin:4px 0 0; font-size:19px; font-weight:600; line-height:1.25">{{ sel.title }}</h2>
+                <div style="font-size:12px; color:#605d5d; margin-top:4px">{{ sel.meta }}</div>
+              </div>
+              <span style="{{ sel.stStyle }}"><span style="{{ sel.dotStyle }}"></span>{{ sel.stLabel }}</span>
+            </div>
+
+            <div style="display:flex; gap:2px; margin-top:16px; flex-wrap:wrap">
+              <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="6">
+                <button onClick="{{ tb.pick }}" style="{{ tb.style }}">{{ tb.label }}</button>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ tabView }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:#605d5d">
+                <button onClick="{{ zoomOut }}" style="width:30px; height:30px; background:#f3f2f2; border:1px solid rgba(32,30,29,.16); border-radius:2px; cursor:pointer; font-size:15px">−</button>
+                <span style="min-width:46px; text-align:center">{{ zoom }}%</span>
+                <button onClick="{{ zoomIn }}" style="width:30px; height:30px; background:#f3f2f2; border:1px solid rgba(32,30,29,.16); border-radius:2px; cursor:pointer; font-size:15px">+</button>
+                <span style="margin-left:auto">{{ t.preview_hint }}</span>
+              </div>
+              <div style="margin-top:12px; background:#d7d3d3; padding:14px; border-radius:2px; max-height:360px; overflow:auto">
+                <div style="{{ sheetStyle }}">
+                  <div style="text-align:right; font-size:11px; color:#605d5d">{{ sel.num }}</div>
+                  <div style="text-align:center; font-weight:600; font-size:15px; letter-spacing:.16em; text-transform:uppercase; margin-top:14px">{{ sel.docKind }}</div>
+                  <div style="margin-top:18px; font-size:12px; line-height:1.6; text-align:right">{{ sel.addressee }}</div>
+                  <div style="margin-top:16px; font-size:12px; line-height:1.75; text-align:justify">{{ sel.body1 }}</div>
+                  <div style="margin-top:10px; font-size:12px; line-height:1.75; text-align:justify">{{ sel.body2 }}</div>
+                  <div style="margin-top:26px; display:flex; justify-content:space-between; align-items:flex-end; font-size:12px">
+                    <span>{{ sel.signer }}</span>
+                    <span style="text-align:center; border:1px solid #006786; color:#006786; padding:6px 10px; font-size:9px; line-height:1.4; max-width:150px">{{ sel.stamp }}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
+                <button onClick="{{ openApprove }}" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 15px; border-radius:2px; cursor:pointer">{{ t.approve }}</button>
+                <button onClick="{{ openSign }}" style="background:transparent; border:1px solid #0088b0; color:#006786; font-weight:600; font-size:14px; padding:10px 15px; border-radius:2px; cursor:pointer"><i class="ph-duotone ph-signature" style="font-size:16px; vertical-align:-3px; margin-right:6px"></i>{{ t.sign }}</button>
+                <button onClick="{{ openReject }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:10px 15px; border-radius:2px; cursor:pointer">{{ t.reject }}</button>
+                <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:10px 15px; border-radius:2px; cursor:pointer">{{ t.download }}</button>
+              </div>
+              <div style="font-size:12px; color:#605d5d; margin-top:9px; line-height:1.5">{{ t.download_note }}</div>
+            </sc-if>
+
+            <sc-if value="{{ tabVersions }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px">
+                <sc-for list="{{ versions }}" as="v" hint-placeholder-count="4">
+                  <div style="display:flex; gap:12px; align-items:baseline; padding:10px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+                    <span style="font-weight:600; font-size:14px; flex:0 0 44px">{{ v.ver }}</span>
+                    <span style="flex:1; font-size:13px; line-height:1.4">{{ v.note }}</span>
+                    <span style="font-size:12px; color:#605d5d">{{ v.author }}</span>
+                    <span style="font-size:12px; color:#605d5d">{{ v.date }}</span>
+                    <button style="background:transparent; border:0; color:#006786; font:inherit; font-size:13px; cursor:pointer; padding:0">{{ t.compare }}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabFiles }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px">
+                <sc-for list="{{ files }}" as="f" hint-placeholder-count="3">
+                  <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+                    <i class="ph-duotone {{ f.icon }}" style="font-size:20px; color:#006786"></i>
+                    <span style="flex:1; font-size:13px">{{ f.name }}</span>
+                    <span style="font-size:12px; color:#605d5d">{{ f.size }}</span>
+                    <button style="background:transparent; border:0; color:#006786; font:inherit; font-size:13px; cursor:pointer; padding:0">{{ t.preview }}</button>
+                  </div>
+                </sc-for>
+                <div style="font-size:12px; color:#605d5d; margin-top:12px; line-height:1.55">{{ t.files_limits }}</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabComments }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px">
+                <sc-for list="{{ comments }}" as="c" hint-placeholder-count="2">
+                  <div style="padding:11px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+                    <div style="display:flex; gap:10px; align-items:baseline">
+                      <span style="font-size:13px; font-weight:600">{{ c.author }}</span>
+                      <span style="font-size:12px; color:#605d5d">{{ c.date }}</span>
+                    </div>
+                    <div style="font-size:13px; line-height:1.55; margin-top:4px">{{ c.text }}</div>
+                  </div>
+                </sc-for>
+                <textarea placeholder="{{ t.comment_ph }}" style="width:100%; min-height:74px; margin-top:12px; background:#f3f2f2; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; padding:9px 10px; resize:vertical"></textarea>
+                <button style="margin-top:9px; background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; font-weight:600; padding:8px 14px; border-radius:2px; cursor:pointer">{{ t.send }}</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabLinks }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px">
+                <sc-for list="{{ links }}" as="l" hint-placeholder-count="2">
+                  <div style="padding:11px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+                    <div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ l.kind }}</div>
+                    <div style="font-size:14px; margin-top:3px"><a href="#">{{ l.title }}</a></div>
+                    <div style="font-size:12px; color:#605d5d; margin-top:2px">{{ l.meta }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabRoute }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px">
+                <sc-for list="{{ route }}" as="s" hint-placeholder-count="5">
+                  <div style="display:flex; gap:12px">
+                    <div style="flex:none; display:flex; flex-direction:column; align-items:center; width:22px">
+                      <span style="{{ s.nodeStyle }}">{{ s.nodeIcon }}</span>
+                      <span style="{{ s.lineStyle }}"></span>
+                    </div>
+                    <div style="padding-bottom:16px; flex:1">
+                      <div style="font-size:14px; font-weight:600; line-height:1.3">{{ s.role }}</div>
+                      <div style="font-size:13px; color:#444141">{{ s.name }}</div>
+                      <div style="font-size:12px; color:#605d5d; margin-top:2px">{{ s.result }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </aside>
+        </div>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isRapports }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Рапорты и заявки">
+        <sc-if value="{{ rapportList }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+            <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_rapports }}</h1>
+            <button onClick="{{ goNewRapport }}" style="margin-left:auto; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 16px; border-radius:2px; cursor:pointer">{{ t.new_rapport }}</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; margin-top:20px">
+            <sc-for list="{{ rapportTypes }}" as="rt" hint-placeholder-count="4">
+              <button onClick="{{ rt.open }}" style="text-align:left; background:#eae9e9; border:0; border-radius:2px; padding:16px; cursor:pointer; font:inherit">
+                <i class="ph-duotone {{ rt.icon }}" style="font-size:24px; color:#0088b0"></i>
+                <div style="font-size:16px; font-weight:600; margin-top:9px; line-height:1.25">{{ rt.title }}</div>
+                <div style="font-size:13px; color:#444141; margin-top:5px; line-height:1.5">{{ rt.note }}</div>
+              </button>
+            </sc-for>
+          </div>
+          <div style="margin-top:32px; border-bottom:2px solid #201e1d; padding-bottom:7px">
+            <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.my_submitted }}</h2>
+          </div>
+          <sc-for list="{{ myRapports }}" as="r" hint-placeholder-count="4">
+            <div style="display:flex; gap:14px; align-items:center; padding:13px 0; border-bottom:1px solid rgba(32,30,29,.08); flex-wrap:wrap">
+              <span style="flex:1 1 240px; font-size:14px">{{ r.title }}</span>
+              <span style="font-size:13px; color:#605d5d">{{ r.num }}</span>
+              <span style="font-size:13px; color:#444141; flex:0 0 190px">{{ r.step }}</span>
+              <span style="{{ r.stStyle }}"><span style="{{ r.dotStyle }}"></span>{{ r.stLabel }}</span>
+              <button onClick="{{ goDocuments }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.open }}</button>
+            </div>
+          </sc-for>
+        </sc-if>
+
+        <sc-if value="{{ rapportForm }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ backToRapports }}" style="background:transparent; border:0; color:#006786; font:inherit; font-size:13px; cursor:pointer; padding:0">← {{ t.title_rapports }}</button>
+          <h1 style="margin:10px 0 0; font-size:27px; font-weight:600">{{ formTitle }}</h1>
+          <div style="font-size:13px; color:#605d5d; margin-top:5px">{{ t.form_sub }}</div>
+          <div style="display:flex; gap:30px; margin-top:22px; flex-wrap:wrap; align-items:flex-start">
+            <form onSubmit="{{ submitRapport }}" style="flex:1 1 420px; min-width:0">
+              <sc-if value="{{ formVacation }}" hint-placeholder-val="{{ true }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px">
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_type }}
+                  <select value="{{ form.type }}" onChange="{{ onFormType }}" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px">
+                    <sc-for list="{{ vacationKinds }}" as="k" hint-placeholder-count="6">
+                      <option value="{{ k.value }}">{{ k.label }}</option>
+                    </sc-for>
+                  </select>
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_from }}
+                  <input value="{{ form.from }}" onChange="{{ onFormFrom }}" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_to }}
+                  <input value="{{ form.to }}" onChange="{{ onFormTo }}" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_days }}
+                  <input value="{{ form.days }}" onChange="{{ onFormDays }}" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_place }}
+                  <input value="{{ form.place }}" onChange="{{ onFormPlace }}" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+                </label>
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_substitute }}
+                  <input value="{{ form.substitute }}" onChange="{{ onFormSub }}" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+                </label>
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_reason }}
+                  <textarea value="{{ form.reason }}" onChange="{{ onFormReason }}" style="display:block; width:100%; margin-top:5px; min-height:88px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:8px 9px; resize:vertical"></textarea>
+                </label>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ formAppoint }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px">
+                <label style="font-size:12px; color:#605d5d">{{ t.f_cur_pos }}
+                  <input value="Старший инспектор отдела кадров" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" readOnly="{{ true }}" />
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_rank }}
+                  <input value="майор полиции" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" readOnly="{{ true }}" />
+                </label>
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_new_pos }}
+                  <select style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px">
+                    <sc-for list="{{ appointPositions }}" as="ap" hint-placeholder-count="3">
+                      <option>{{ ap }}</option>
+                    </sc-for>
+                  </select>
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_appoint_date }}
+                  <input value="01.11.2026" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_kind }}
+                  <select style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px">
+                    <option>Назначение</option><option>Перемещение</option><option>Ротация</option>
+                  </select>
+                </label>
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_justify }}
+                  <textarea style="display:block; width:100%; margin-top:5px; min-height:88px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:8px 9px; resize:vertical">В связи с производственной необходимостью и по результатам аттестации.</textarea>
+                </label>
+              </div>
+              </sc-if>
+
+              <sc-if value="{{ formDismiss }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px">
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_dismiss_reason }}
+                  <select style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px">
+                    <sc-for list="{{ dismissReasons }}" as="dr" hint-placeholder-count="4">
+                      <option>{{ dr }}</option>
+                    </sc-for>
+                  </select>
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_dismiss_date }}
+                  <input value="15.12.2026" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+                </label>
+                <label style="font-size:12px; color:#605d5d">{{ t.f_seniority }}
+                  <input value="11 лет 4 месяца (в льготном исчислении 14 лет)" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" readOnly="{{ true }}" />
+                </label>
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_handover }}
+                  <input value="Обходной лист формируется автоматически после регистрации рапорта" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" readOnly="{{ true }}" />
+                </label>
+                <label style="font-size:12px; color:#605d5d; grid-column:1 / -1">{{ t.f_explain }}
+                  <textarea style="display:block; width:100%; margin-top:5px; min-height:88px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:8px 9px; resize:vertical"></textarea>
+                </label>
+              </div>
+              </sc-if>
+              <div style="display:flex; align-items:center; gap:12px; margin-top:16px; padding:13px 14px; background:#eae9e9; border-radius:2px; flex-wrap:wrap">
+                <i class="ph-duotone ph-paperclip" style="font-size:20px; color:#006786"></i>
+                <span style="font-size:13px; flex:1 1 180px">{{ t.f_attach }}</span>
+                <button type="button" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.f_attach_btn }}</button>
+              </div>
+              <div style="font-size:13px; color:#605d5d; margin-top:12px; line-height:1.55">{{ t.f_balance }}</div>
+              <div style="display:flex; gap:9px; margin-top:18px; flex-wrap:wrap">
+                <button type="submit" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 17px; border-radius:2px; cursor:pointer">{{ t.f_submit }}</button>
+                <button type="button" onClick="{{ backToRapports }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 17px; border-radius:2px; cursor:pointer">{{ t.f_draft }}</button>
+              </div>
+            </form>
+
+            <aside style="flex:1 1 320px; max-width:420px; background:#eae9e9; border-radius:2px; padding:18px">
+              <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#7d7979">{{ t.route_title }}</div>
+              <div style="font-size:13px; color:#444141; margin-top:6px; line-height:1.5">{{ t.route_note }}</div>
+              <div style="margin-top:16px">
+                <sc-for list="{{ formRoute }}" as="s" hint-placeholder-count="5">
+                  <div style="display:flex; gap:12px">
+                    <div style="flex:none; display:flex; flex-direction:column; align-items:center; width:22px">
+                      <span style="{{ s.nodeStyle }}">{{ s.nodeIcon }}</span>
+                      <span style="{{ s.lineStyle }}"></span>
+                    </div>
+                    <div style="padding-bottom:16px; flex:1">
+                      <div style="font-size:14px; font-weight:600; line-height:1.3">{{ s.role }}</div>
+                      <div style="font-size:13px; color:#444141">{{ s.name }}</div>
+                      <div style="font-size:12px; color:#605d5d; margin-top:2px">{{ s.result }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="font-size:12px; color:#605d5d; line-height:1.55; border-top:1px solid rgba(32,30,29,.12); padding-top:12px">{{ t.route_1c }}</div>
+            </aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ rapportDone }}" hint-placeholder-val="{{ false }}">
+          <div style="max-width:660px">
+            <div style="display:flex; gap:14px; align-items:flex-start; background:#e9f8ff; border-radius:2px; padding:20px">
+              <i class="ph-duotone ph-check-circle" style="font-size:30px; color:#006786; flex:none"></i>
+              <div>
+                <h1 style="margin:0; font-size:23px; font-weight:600; line-height:1.2">{{ t.done_title }}</h1>
+                <div style="font-size:14px; color:#004961; margin-top:7px; line-height:1.55">{{ t.done_body }}</div>
+              </div>
+            </div>
+            <div style="margin-top:24px; border-bottom:2px solid #201e1d; padding-bottom:7px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.done_next }}</h2>
+            </div>
+            <sc-for list="{{ doneSteps }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                <span style="{{ s.nodeStyle }}">{{ s.nodeIcon }}</span>
+                <div style="flex:1">
+                  <div style="font-size:14px; font-weight:600">{{ s.role }}</div>
+                  <div style="font-size:13px; color:#444141">{{ s.name }} · {{ s.result }}</div>
+                </div>
+              </div>
+            </sc-for>
+            <div style="display:flex; gap:9px; margin-top:20px; flex-wrap:wrap">
+              <button onClick="{{ goDocuments }}" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.done_open }}</button>
+              <button onClick="{{ backToRapports }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.done_back }}</button>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isAcademy }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Академия">
+        <sc-if value="{{ courseOpen }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ closeCourse }}" style="background:transparent; border:0; color:#006786; font:inherit; font-size:13px; cursor:pointer; padding:0">← {{ t.title_academy }}</button>
+          <div style="display:flex; gap:30px; margin-top:12px; flex-wrap:wrap; align-items:flex-start">
+            <div style="flex:1 1 420px; min-width:0">
+              <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#006786">{{ course.kicker }}</div>
+              <h1 style="margin:6px 0 0; font-size:27px; font-weight:600; line-height:1.2">{{ course.title }}</h1>
+              <div style="font-size:14px; color:#444141; margin-top:9px; line-height:1.6; max-width:52ch">{{ course.about }}</div>
+              <div style="display:flex; gap:22px; margin-top:16px; font-size:13px; color:#605d5d; flex-wrap:wrap">
+                <span>{{ course.hours }}</span><span>{{ course.langs }}</span><span>{{ course.author }}</span>
+              </div>
+              <div style="margin-top:24px; border-bottom:2px solid #201e1d; padding-bottom:7px">
+                <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.course_modules }}</h2>
+              </div>
+              <sc-for list="{{ modules }}" as="m" hint-placeholder-count="5">
+                <div style="display:flex; gap:12px; align-items:center; padding:13px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                  <span style="{{ m.nodeStyle }}">{{ m.nodeIcon }}</span>
+                  <div style="flex:1 1 200px">
+                    <div style="font-size:14px; font-weight:{{ m.weight }}; line-height:1.3">{{ m.title }}</div>
+                    <div style="font-size:12px; color:#605d5d; margin-top:2px">{{ m.meta }}</div>
+                  </div>
+                  <button disabled="{{ m.locked }}" style="{{ m.btnStyle }}">{{ m.action }}</button>
+                </div>
+              </sc-for>
+            </div>
+            <aside style="flex:1 1 300px; max-width:400px">
+              <div style="background:#eae9e9; border-radius:2px; padding:18px">
+                <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#7d7979">{{ t.course_progress }}</div>
+                <div style="display:flex; align-items:baseline; gap:8px; margin-top:6px">
+                  <span style="font-size:31px; font-weight:600; color:#006786">{{ course.pct }}%</span>
+                  <span style="font-size:13px; color:#605d5d">{{ course.progressNote }}</span>
+                </div>
+                <div style="height:6px; background:#d7d3d3; margin-top:10px; border-radius:1px">
+                  <div style="{{ course.barStyle }}"></div>
+                </div>
+                <div style="font-size:13px; color:#444141; margin-top:14px; line-height:1.55">{{ t.course_ecp_note }}</div>
+                <button onClick="{{ openTest }}" style="margin-top:12px; width:100%; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 15px; border-radius:2px; cursor:pointer">{{ t.course_test }}</button>
+              </div>
+              <div style="margin-top:18px; background:#f8f4f4; border-radius:2px; padding:18px">
+                <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#7d7979">{{ t.certificate }}</div>
+                <div style="margin-top:10px; border:1px solid rgba(32,30,29,.2); padding:16px; text-align:center">
+                  <div style="font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:#605d5d">{{ t.cert_head }}</div>
+                  <div style="font-size:17px; font-weight:600; margin-top:9px; line-height:1.25">{{ me.name }}</div>
+                  <div style="font-size:12px; color:#444141; margin-top:7px; line-height:1.5">{{ t.cert_body }}</div>
+                  <div style="font-size:11px; color:#605d5d; margin-top:11px">{{ t.cert_meta }}</div>
+                </div>
+                <div style="font-size:12px; color:#605d5d; margin-top:11px; line-height:1.5">{{ t.cert_note }}</div>
+              </div>
+            </aside>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ courseCatalog }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+            <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_academy }}</h1>
+            <span style="font-size:13px; color:#605d5d">{{ t.academy_sub }}</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-top:22px">
+            <sc-for list="{{ courses }}" as="c" hint-placeholder-count="5">
+              <article style="background:#eae9e9; border-radius:2px; padding:17px; display:flex; flex-direction:column; gap:10px">
+                <div style="height:96px; border-radius:1px; background:repeating-linear-gradient(135deg,#d7d3d3 0 3px,#eae9e9 3px 6px); display:grid; place-items:center">
+                  <span style="font-family:ui-monospace,monospace; font-size:9px; color:#444141; background:#f3f2f2; padding:3px 6px">{{ c.imgNote }}</span>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+                  <span style="{{ c.tagStyle }}">{{ c.tag }}</span>
+                  <span style="font-size:12px; color:#605d5d">{{ c.hours }}</span>
+                </div>
+                <h3 style="margin:0; font-size:17px; font-weight:600; line-height:1.25; text-wrap:pretty">{{ c.title }}</h3>
+                <p style="margin:0; font-size:13px; color:#444141; line-height:1.5; flex:1">{{ c.note }}</p>
+                <div style="height:5px; background:#d7d3d3; border-radius:1px">
+                  <div style="{{ c.barStyle }}"></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px">
+                  <span style="font-size:12px; color:#605d5d; flex:1">{{ c.progressNote }}</span>
+                  <button onClick="{{ c.open }}" style="{{ c.btnStyle }}">{{ c.action }}</button>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+        </sc-if>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isVnd }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="ВНД">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_vnd }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.vnd_sub }}</span>
+        </div>
+        <div style="display:flex; gap:30px; margin-top:22px; flex-wrap:wrap; align-items:flex-start">
+          <div style="flex:0 1 220px; min-width:190px">
+            <div style="font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#7d7979; padding-bottom:9px">{{ t.vnd_folders }}</div>
+            <sc-for list="{{ vndFolders }}" as="f" hint-placeholder-count="5">
+              <button onClick="{{ f.pick }}" style="{{ f.style }}">
+                <i class="ph-duotone {{ f.icon }}" style="font-size:17px; flex:none"></i>
+                <span style="flex:1; text-align:left">{{ f.label }}</span>
+                <span style="font-size:12px; color:#7d7979">{{ f.count }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="flex:1 1 460px; min-width:0">
+            <sc-for list="{{ vndDocs }}" as="d" hint-placeholder-count="5">
+              <div style="padding:15px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+                <div style="display:flex; gap:12px; align-items:baseline; flex-wrap:wrap">
+                  <span style="font-size:15px; font-weight:600; flex:1 1 260px; line-height:1.3">{{ d.title }}</span>
+                  <span style="{{ d.stStyle }}"><span style="{{ d.dotStyle }}"></span>{{ d.stLabel }}</span>
+                </div>
+                <div style="display:flex; gap:18px; margin-top:6px; font-size:12px; color:#605d5d; flex-wrap:wrap">
+                  <span>{{ d.num }}</span><span>{{ d.mode }}</span><span>{{ d.due }}</span><span>{{ d.dept }}</span>
+                </div>
+                <div style="display:flex; gap:9px; margin-top:11px; flex-wrap:wrap; align-items:center">
+                  <button onClick="{{ d.read }}" style="{{ d.readStyle }}">{{ d.readLabel }}</button>
+                  <button onClick="{{ goDocuments }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.open }}</button>
+                  <span style="font-size:12px; color:#605d5d">{{ d.readers }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isProjects }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Проектное управление">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_projects }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.projects_sub }}</span>
+        </div>
+        <div style="background:#eae9e9; border-radius:2px; padding:18px; margin-top:20px; display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start">
+          <div style="flex:1 1 300px; min-width:0">
+            <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#006786">{{ protocol.kicker }}</div>
+            <h2 style="margin:5px 0 0; font-size:20px; font-weight:600; line-height:1.25">{{ protocol.title }}</h2>
+            <div style="font-size:13px; color:#444141; margin-top:7px; line-height:1.55">{{ protocol.note }}</div>
+          </div>
+          <div style="display:flex; gap:26px; flex-wrap:wrap">
+            <div><div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.pm_status }}</div><div style="font-size:15px; font-weight:600; margin-top:3px">{{ protocol.status }}</div></div>
+            <div><div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.pm_author }}</div><div style="font-size:15px; margin-top:3px">{{ protocol.author }}</div></div>
+            <div><div style="font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#7d7979">{{ t.pm_due }}</div><div style="font-size:15px; margin-top:3px">{{ protocol.due }}</div></div>
+          </div>
+        </div>
+        <div style="margin-top:28px">
+          <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+            <div style="padding:16px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+              <div style="display:flex; gap:14px; align-items:baseline; flex-wrap:wrap">
+                <span style="font-size:16px; font-weight:600; flex:1 1 280px; line-height:1.3">{{ p.title }}</span>
+                <span style="{{ p.stStyle }}"><span style="{{ p.dotStyle }}"></span>{{ p.stLabel }}</span>
+                <span style="font-size:13px; color:#605d5d">{{ p.due }}</span>
+              </div>
+              <div style="display:flex; gap:16px; margin-top:8px; font-size:13px; color:#444141; flex-wrap:wrap">
+                <span>{{ p.owner }}</span><span>{{ p.milestones }}</span><span>{{ p.tasks }}</span>
+              </div>
+              <div style="height:5px; background:#d7d3d3; margin-top:10px; border-radius:1px; max-width:420px">
+                <div style="{{ p.barStyle }}"></div>
+              </div>
+              <div style="display:flex; gap:9px; margin-top:12px; flex-wrap:wrap">
+                <button onClick="{{ openApprove }}" style="background:transparent; border:1px solid #0088b0; color:#006786; font-size:13px; font-weight:600; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.pm_confirm }}</button>
+                <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.pm_extend }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isJournals }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Журналы учёта">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_journals }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.journals_sub }}</span>
+          <button style="margin-left:auto; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 16px; border-radius:2px; cursor:pointer">{{ t.j_new }}</button>
+        </div>
+        <div style="display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; margin-top:18px">
+          <label style="font-size:12px; color:#605d5d">{{ t.j_period }}
+            <select style="display:block; margin-top:4px; min-height:34px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:5px 8px">
+              <option>III квартал 2026</option><option>IV квартал 2026</option><option>2026 год</option>
+            </select>
+          </label>
+          <label style="font-size:12px; color:#605d5d">{{ t.j_dept }}
+            <select style="display:block; margin-top:4px; min-height:34px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:5px 8px">
+              <option>Все подразделения</option><option>Отдел боевой подготовки</option><option>Отдел следствия</option><option>Патрульная служба</option>
+            </select>
+          </label>
+          <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; font-weight:600; padding:9px 14px; border-radius:2px; cursor:pointer">{{ t.j_load }}</button>
+          <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; font-weight:600; padding:9px 14px; border-radius:2px; cursor:pointer">{{ t.export_xls }}</button>
+        </div>
+        <sc-for list="{{ journals }}" as="j" hint-placeholder-count="5">
+          <div style="padding:15px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+            <div style="display:flex; gap:14px; align-items:baseline; flex-wrap:wrap">
+              <span style="flex:1 1 300px; font-size:15px; font-weight:600; line-height:1.3">{{ j.title }}</span>
+              <span style="{{ j.stStyle }}"><span style="{{ j.dotStyle }}"></span>{{ j.stLabel }}</span>
+            </div>
+            <div style="display:flex; gap:24px; margin-top:7px; font-size:13px; color:#444141; flex-wrap:wrap">
+              <span>{{ j.period }}</span><span>{{ j.dept }}</span><span>{{ j.staff }}</span>
+            </div>
+            <div style="display:flex; gap:9px; margin-top:11px; flex-wrap:wrap">
+              <button onClick="{{ openApprove }}" style="background:transparent; border:1px solid #0088b0; color:#006786; font-size:13px; font-weight:600; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.approve }}</button>
+              <button onClick="{{ goDocuments }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.open }}</button>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isSurveys }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Опросы и аттестация">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_surveys }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.surveys_sub }}</span>
+          <button style="margin-left:auto; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 16px; border-radius:2px; cursor:pointer">{{ t.sv_new }}</button>
+        </div>
+        <sc-for list="{{ surveys }}" as="sv" hint-placeholder-count="3">
+          <div style="padding:17px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+            <div style="display:flex; gap:14px; align-items:baseline; flex-wrap:wrap">
+              <span style="flex:1 1 300px; font-size:16px; font-weight:600; line-height:1.3">{{ sv.title }}</span>
+              <span style="font-size:13px; color:#605d5d">{{ sv.period }}</span>
+            </div>
+            <div style="display:flex; gap:22px; margin-top:8px; font-size:13px; color:#444141; flex-wrap:wrap">
+              <span>{{ sv.kind }}</span><span>{{ t.sv_anon }}: {{ sv.anon }}</span><span>{{ sv.done }}</span>
+            </div>
+            <div style="height:5px; background:#d7d3d3; margin-top:10px; border-radius:1px; max-width:420px">
+              <div style="{{ sv.barStyle }}"></div>
+            </div>
+            <div style="font-size:12px; color:#605d5d; margin-top:8px; line-height:1.5">{{ sv.note }}</div>
+            <div style="display:flex; gap:9px; margin-top:11px; flex-wrap:wrap">
+              <button style="background:transparent; border:1px solid #0088b0; color:#006786; font-size:13px; font-weight:600; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.sv_scale }}</button>
+              <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.sv_export }}</button>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isOrgstruct }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Оргструктура">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_orgstruct }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.orgstruct_sub }}</span>
+        </div>
+        <div style="display:flex; gap:34px; margin-top:22px; flex-wrap:wrap; align-items:flex-start">
+          <div style="flex:1 1 440px; min-width:0">
+            <sc-for list="{{ orgTree }}" as="o" hint-placeholder-count="7">
+              <div style="{{ o.style }}">
+                <span style="flex:1 1 220px; font-size:15px; line-height:1.3">{{ o.name }}</span>
+                <span style="font-size:13px; color:#444141; flex:0 1 260px">{{ t.org_head }}: {{ o.head }}</span>
+                <span style="font-size:13px; color:#605d5d">{{ t.org_staff }}: {{ o.staff }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="flex:1 1 300px; max-width:400px">
+            <div style="border-bottom:2px solid #201e1d; padding-bottom:7px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.org_groups }}</h2>
+            </div>
+            <sc-for list="{{ workGroups }}" as="g" hint-placeholder-count="3">
+              <div style="padding:13px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                <div style="font-size:14px; line-height:1.35">{{ g.name }}</div>
+                <div style="font-size:12px; color:#605d5d; margin-top:4px">{{ g.members }} · {{ t.org_head }}: {{ g.lead }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Настройки процессов">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_settings }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.settings_sub }}</span>
+        </div>
+        <label style="display:inline-block; font-size:12px; color:#605d5d; margin-top:18px">{{ t.set_process }}
+          <select style="display:block; margin-top:4px; min-height:36px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:5px 9px">
+            <sc-for list="{{ processList }}" as="p" hint-placeholder-count="6">
+              <option>{{ p }}</option>
+            </sc-for>
+          </select>
+        </label>
+        <div style="display:flex; gap:10px; align-items:center; padding:11px 0 9px; margin-top:16px; border-bottom:1px solid rgba(32,30,29,.16); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#605d5d">
+          <span style="flex:2 1 180px">{{ t.set_stage }}</span>
+          <span style="flex:1 1 150px">{{ t.set_roles }}</span>
+          <span style="flex:2 1 200px">{{ t.set_decisions }}</span>
+          <span style="flex:0 0 110px">{{ t.set_deadline }}</span>
+          <span style="flex:1 1 140px">{{ t.col_status }}</span>
+        </div>
+        <sc-for list="{{ processStages }}" as="st" hint-placeholder-count="5">
+          <div style="display:flex; gap:10px; align-items:baseline; padding:13px 0; border-bottom:1px solid rgba(32,30,29,.08); font-size:14px">
+            <span style="flex:2 1 180px; font-weight:600; line-height:1.3">{{ st.stage }}</span>
+            <span style="flex:1 1 150px; font-size:13px">{{ st.roles }}</span>
+            <span style="flex:2 1 200px; font-size:13px; color:#444141; line-height:1.4">{{ st.decisions }}</span>
+            <span style="flex:0 0 110px; font-size:13px; color:#605d5d">{{ st.deadline }}</span>
+            <span style="flex:1 1 140px; font-size:13px; color:#605d5d">{{ st.status }}</span>
+          </div>
+        </sc-for>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isSpravki }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Справки">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_spravki }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.spravki_sub }}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; margin-top:22px">
+          <sc-for list="{{ spravkiTypes }}" as="sp" hint-placeholder-count="4">
+            <div style="background:#eae9e9; border-radius:2px; padding:17px; display:flex; flex-direction:column; gap:9px">
+              <i class="ph-duotone {{ sp.icon }}" style="font-size:24px; color:#0088b0"></i>
+              <div style="font-size:16px; font-weight:600; line-height:1.25">{{ sp.title }}</div>
+              <div style="font-size:13px; color:#444141; line-height:1.5; flex:1">{{ sp.note }}</div>
+              <div style="font-size:12px; color:#605d5d">{{ t.sp_col_source }}: {{ sp.source }}</div>
+              <button style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 14px; border-radius:2px; cursor:pointer">{{ t.sp_request }}</button>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:32px; border-bottom:2px solid #201e1d; padding-bottom:7px">
+          <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.my_submitted }}</h2>
+        </div>
+        <sc-for list="{{ spravkiIssued }}" as="i" hint-placeholder-count="3">
+          <div style="display:flex; gap:14px; align-items:center; padding:13px 0; border-bottom:1px solid rgba(32,30,29,.08); flex-wrap:wrap">
+            <span style="flex:1 1 260px; font-size:14px">{{ i.type }}</span>
+            <span style="font-size:13px; color:#605d5d">{{ i.num }}</span>
+            <span style="font-size:13px; color:#605d5d">{{ i.date }}</span>
+            <span style="{{ i.stStyle }}">{{ i.st }}</span>
+            <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.sp_ready }}</button>
+          </div>
+        </sc-for>
+        <div style="font-size:13px; color:#605d5d; margin-top:14px; line-height:1.55; max-width:62ch">{{ t.sp_note }}</div>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isIdeas }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Площадка предложений">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_ideas }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.ideas_sub }}</span>
+        </div>
+        <div style="display:flex; gap:30px; margin-top:22px; flex-wrap:wrap; align-items:flex-start">
+          <div style="flex:1 1 380px; min-width:0">
+            <label style="font-size:12px; color:#605d5d">{{ t.idea_theme }}
+              <input placeholder="{{ t.idea_theme_ph }}" style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px" />
+            </label>
+            <label style="display:block; font-size:12px; color:#605d5d; margin-top:14px">{{ t.idea_service }}
+              <select style="display:block; width:100%; margin-top:5px; min-height:38px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:6px 9px">
+                <sc-for list="{{ ideaServices }}" as="sv" hint-placeholder-count="4">
+                  <option>{{ sv }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="display:block; font-size:12px; color:#605d5d; margin-top:14px">{{ t.idea_text }}
+              <textarea placeholder="{{ t.idea_text_ph }}" style="display:block; width:100%; margin-top:5px; min-height:120px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:8px 9px; resize:vertical"></textarea>
+            </label>
+            <button style="margin-top:16px; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 17px; border-radius:2px; cursor:pointer">{{ t.idea_send }}</button>
+          </div>
+          <div style="flex:1 1 360px; min-width:0">
+            <div style="border-bottom:2px solid #201e1d; padding-bottom:7px">
+              <h2 style="margin:0; font-size:17px; font-weight:600">{{ t.idea_my }}</h2>
+            </div>
+            <sc-for list="{{ myIdeas }}" as="i" hint-placeholder-count="3">
+              <div style="padding:13px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                <div style="display:flex; gap:10px; align-items:baseline; flex-wrap:wrap">
+                  <span style="flex:1 1 200px; font-size:14px; line-height:1.35">{{ i.title }}</span>
+                  <span style="{{ i.stStyle }}"><span style="{{ i.dotStyle }}"></span>{{ i.stLabel }}</span>
+                </div>
+                <div style="font-size:12px; color:#605d5d; margin-top:4px">{{ i.num }} · {{ i.service }}</div>
+                <div style="font-size:13px; color:#444141; margin-top:4px; line-height:1.45">{{ i.result }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isVvk }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="ВВК">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_vvk }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.vvk_sub }}</span>
+          <button onClick="{{ openSign }}" style="margin-left:auto; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:10px 16px; border-radius:2px; cursor:pointer">{{ t.vvk_new }}</button>
+        </div>
+        <sc-for list="{{ vvkList }}" as="v" hint-placeholder-count="3">
+          <div style="padding:15px 0; border-bottom:1px solid rgba(32,30,29,.1)">
+            <div style="display:flex; gap:14px; align-items:baseline; flex-wrap:wrap">
+              <span style="font-size:16px; font-weight:600; flex:1 1 220px">{{ v.who }}</span>
+              <span style="{{ v.stStyle }}"><span style="{{ v.dotStyle }}"></span>{{ v.stLabel }}</span>
+              <span style="font-size:13px; color:#605d5d">{{ v.num }}</span>
+            </div>
+            <div style="display:flex; gap:26px; margin-top:8px; font-size:13px; color:#444141; flex-wrap:wrap">
+              <span>{{ v.reason }}</span>
+              <span>{{ t.pm_due }}: {{ v.date }}</span>
+              <span>{{ t.vvk_concl }}: {{ v.concl }}</span>
+            </div>
+            <div style="font-size:12px; color:#605d5d; margin-top:6px">{{ t.vvk_ack }}: {{ v.state }}</div>
+            <div style="display:flex; gap:9px; margin-top:11px; flex-wrap:wrap">
+              <button onClick="{{ openSign }}" style="background:transparent; border:1px solid #0088b0; color:#006786; font-size:13px; font-weight:600; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.sign }}</button>
+              <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:13px; padding:7px 12px; border-radius:2px; cursor:pointer">{{ t.download }}</button>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+      </sc-if>
+
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Мобильная версия">
+        <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap">
+          <h1 style="margin:0; font-size:27px; font-weight:600">{{ t.title_mobile }}</h1>
+          <span style="font-size:13px; color:#605d5d">{{ t.mobile_sub }}</span>
+        </div>
+        <div style="display:flex; gap:28px; margin-top:24px; flex-wrap:wrap">
+
+          <div style="flex:none; width:376px">
+            <div style="width:376px; border:1px solid rgba(32,30,29,.22); border-radius:22px; padding:9px; background:#f3f2f2">
+              <div style="height:660px; border-radius:15px; background:#f3f2f2; overflow:hidden; display:flex; flex-direction:column">
+                <div style="display:flex; justify-content:space-between; padding:10px 16px 6px; font-size:12px; color:#444141"><span>09:41</span><span>{{ t.m_signal }}</span></div>
+                <div style="padding:2px 16px 10px">
+                  <div style="height:3px; background:#201e1d"></div>
+                  <div style="display:flex; align-items:center; gap:10px; padding:8px 0">
+                    <div style="flex:1">
+                      <div style="font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:#605d5d">{{ t.org }}</div>
+                      <div style="font-size:17px; font-weight:600; line-height:1.1">{{ t.brand }}</div>
+                    </div>
+                    <span style="position:relative; width:30px; height:30px; display:grid; place-items:center"><i class="ph-duotone ph-bell" style="font-size:19px"></i><span style="position:absolute; top:-1px; right:-2px; width:15px; height:15px; background:#d6006c; color:#f3f2f2; font-size:9px; border-radius:8px; display:grid; place-items:center">7</span></span>
+                  </div>
+                  <div style="height:1px; background:#201e1d"></div>
+                </div>
+                <div style="flex:1; overflow:auto; padding:4px 16px 16px">
+                  <div style="display:flex; gap:12px; background:#eae9e9; border-radius:2px; padding:13px">
+                    <div style="width:52px; height:64px; border-radius:1px; background:repeating-linear-gradient(135deg,#d7d3d3 0 3px,#eae9e9 3px 6px)"></div>
+                    <div style="min-width:0">
+                      <div style="font-size:15px; font-weight:600; line-height:1.2">{{ me.name }}</div>
+                      <div style="font-size:12px; color:#605d5d; margin-top:2px">{{ me.rank }}</div>
+                      <div style="font-size:12px; color:#444141; margin-top:5px">{{ t.rating }} <span style="color:#006786; font-weight:600">{{ me.rating }}</span></div>
+                    </div>
+                  </div>
+                  <div style="background:#fff1f4; border-radius:2px; padding:12px; margin-top:12px; font-size:13px; color:#790e3d; line-height:1.45">{{ t.ecp_body }}</div>
+                  <div style="margin-top:16px; border-bottom:2px solid #201e1d; padding-bottom:6px; font-size:15px; font-weight:600">{{ t.block_rapports }}</div>
+                  <sc-for list="{{ mobileRapports }}" as="r" hint-placeholder-count="3">
+                    <div style="padding:11px 0; border-bottom:1px solid rgba(32,30,29,.08)">
+                      <div style="font-size:14px; line-height:1.35">{{ r.title }}</div>
+                      <div style="display:flex; gap:9px; align-items:center; margin-top:5px">
+                        <span style="{{ r.stStyle }}"><span style="{{ r.dotStyle }}"></span>{{ r.stLabel }}</span>
+                        <span style="font-size:12px; color:#605d5d">{{ r.num }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                  <button style="margin-top:16px; width:100%; min-height:46px; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:15px; border-radius:2px; cursor:pointer">{{ t.new_vacation }}</button>
+                </div>
+                <div style="flex:none; display:flex; border-top:1px solid rgba(32,30,29,.16); background:#eae9e9">
+                  <sc-for list="{{ mobileTabs }}" as="m" hint-placeholder-count="5">
+                    <span style="{{ m.style }}"><i class="ph-duotone {{ m.icon }}" style="font-size:20px"></i><span style="font-size:10px">{{ m.label }}</span></span>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:12px; color:#605d5d; margin-top:10px">{{ t.m_cap1 }}</div>
+          </div>
+
+          <div style="flex:none; width:376px">
+            <div style="width:376px; border:1px solid rgba(32,30,29,.22); border-radius:22px; padding:9px; background:#f3f2f2">
+              <div style="height:660px; border-radius:15px; overflow:hidden; display:flex; flex-direction:column">
+                <div style="display:flex; justify-content:space-between; padding:10px 16px 6px; font-size:12px; color:#444141"><span>09:41</span><span>{{ t.m_signal }}</span></div>
+                <div style="padding:2px 16px 10px">
+                  <div style="height:3px; background:#201e1d"></div>
+                  <div style="padding:8px 0; font-size:17px; font-weight:600">{{ t.form_title }}</div>
+                  <div style="height:1px; background:#201e1d"></div>
+                </div>
+                <div style="flex:1; overflow:auto; padding:6px 16px 16px">
+                  <div style="font-size:12px; color:#605d5d">{{ t.f_type }}</div>
+                  <div style="min-height:46px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; padding:12px; font-size:14px; margin-top:5px">{{ t.vac_annual }}</div>
+                  <div style="display:flex; gap:12px; margin-top:12px">
+                    <div style="flex:1"><div style="font-size:12px; color:#605d5d">{{ t.f_from }}</div><div style="min-height:46px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; padding:12px; font-size:14px; margin-top:5px">05.10.2026</div></div>
+                    <div style="flex:1"><div style="font-size:12px; color:#605d5d">{{ t.f_to }}</div><div style="min-height:46px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; padding:12px; font-size:14px; margin-top:5px">02.11.2026</div></div>
+                  </div>
+                  <div style="font-size:13px; color:#605d5d; margin-top:12px; line-height:1.5">{{ t.f_balance }}</div>
+                  <div style="margin-top:18px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#7d7979">{{ t.route_title }}</div>
+                  <sc-for list="{{ formRoute }}" as="s" hint-placeholder-count="4">
+                    <div style="display:flex; gap:11px; margin-top:11px">
+                      <span style="{{ s.nodeStyle }}">{{ s.nodeIcon }}</span>
+                      <div style="flex:1"><div style="font-size:14px; font-weight:600; line-height:1.25">{{ s.role }}</div><div style="font-size:12px; color:#605d5d">{{ s.name }}</div></div>
+                    </div>
+                  </sc-for>
+                  <button style="margin-top:20px; width:100%; min-height:48px; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:15px; border-radius:2px; cursor:pointer">{{ t.f_submit }}</button>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:12px; color:#605d5d; margin-top:10px">{{ t.m_cap2 }}</div>
+          </div>
+
+          <div style="flex:none; width:376px">
+            <div style="width:376px; border:1px solid rgba(32,30,29,.22); border-radius:22px; padding:9px; background:#f3f2f2">
+              <div style="height:660px; border-radius:15px; overflow:hidden; display:flex; flex-direction:column; position:relative; background:#eae9e9">
+                <div style="display:flex; justify-content:space-between; padding:10px 16px 6px; font-size:12px; color:#444141"><span>09:41</span><span>{{ t.m_signal }}</span></div>
+                <div style="flex:1; padding:12px 16px; opacity:.4">
+                  <div style="height:3px; background:#201e1d"></div>
+                  <div style="padding:8px 0; font-size:17px; font-weight:600">{{ t.title_documents }}</div>
+                  <div style="height:1px; background:#201e1d"></div>
+                  <div style="margin-top:12px; font-size:14px; line-height:1.5">{{ t.m_doc_line }}</div>
+                </div>
+                <div style="position:absolute; left:0; right:0; bottom:0; background:#f3f2f2; border-top:1px solid rgba(32,30,29,.16); border-radius:14px 14px 0 0; padding:18px 16px 22px">
+                  <div style="width:42px; height:4px; background:#d7d3d3; border-radius:2px; margin:0 auto 14px"></div>
+                  <div style="font-size:18px; font-weight:600">{{ t.sign_title }}</div>
+                  <div style="font-size:13px; color:#444141; margin-top:6px; line-height:1.5">{{ t.sign_sub }}</div>
+                  <div style="margin-top:14px; font-size:12px; color:#605d5d">{{ t.sign_key }}</div>
+                  <div style="min-height:46px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; padding:12px; font-size:14px; margin-top:5px">AUTH_RSA256 · {{ me.short }}</div>
+                  <div style="margin-top:12px; font-size:12px; color:#605d5d">{{ t.sign_pass }}</div>
+                  <div style="min-height:46px; background:#eae9e9; border:1px solid rgba(32,30,29,.16); border-radius:2px; padding:12px; font-size:15px; letter-spacing:.2em; margin-top:5px">••••••••</div>
+                  <button style="margin-top:16px; width:100%; min-height:48px; background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:15px; border-radius:2px; cursor:pointer">{{ t.sign }}</button>
+                  <button style="margin-top:9px; width:100%; min-height:46px; background:transparent; border:1px solid rgba(32,30,29,.16); font-size:15px; border-radius:2px; cursor:pointer">{{ t.cancel }}</button>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:12px; color:#605d5d; margin-top:10px">{{ t.m_cap3 }}</div>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+    </main>
+  </div>
+
+  <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute; top:112px; right:26px; width:392px; max-height:72vh; overflow:auto; background:#f3f2f2; border-radius:2px; box-shadow:0 12px 32px rgba(45,43,43,.22); padding:18px; z-index:40">
+      <div style="display:flex; align-items:baseline; gap:10px">
+        <h2 style="margin:0; font-size:18px; font-weight:600">{{ t.notifications }}</h2>
+        <button onClick="{{ toggleNotif }}" style="margin-left:auto; background:transparent; border:0; font:inherit; font-size:13px; color:#006786; cursor:pointer; padding:0">{{ t.close }}</button>
+      </div>
+      <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="5">
+        <div style="{{ n.rowStyle }}">
+          <div style="display:flex; gap:10px; align-items:flex-start">
+            <i class="ph-duotone {{ n.icon }}" style="font-size:19px; color:#006786; flex:none; margin-top:2px"></i>
+            <div style="flex:1; min-width:0">
+              <div style="font-size:14px; line-height:1.4">{{ n.text }}</div>
+              <div style="font-size:12px; color:#605d5d; margin-top:3px">{{ n.time }} · {{ n.process }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      <div style="margin-top:18px; border-top:1px solid rgba(32,30,29,.14); padding-top:14px">
+        <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#7d7979">{{ t.notif_settings }}</div>
+        <sc-for list="{{ notifSettings }}" as="s" hint-placeholder-count="5">
+          <div style="display:flex; align-items:center; gap:12px; padding:9px 0">
+            <span style="flex:1; font-size:14px">{{ s.label }}</span>
+            <button onClick="{{ s.toggle }}" style="{{ s.style }}"><span style="{{ s.knob }}"></span></button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ personCard }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ personStyle }}">
+      <div style="display:flex; gap:12px">
+        <div style="width:58px; height:72px; flex:none; border-radius:1px; background:repeating-linear-gradient(135deg,#d7d3d3 0 3px,#eae9e9 3px 6px)"></div>
+        <div style="min-width:0">
+          <div style="font-size:15px; font-weight:600; line-height:1.2">{{ person.name }}</div>
+          <div style="font-size:12px; color:#605d5d; margin-top:2px">{{ person.rank }}</div>
+          <div style="font-size:13px; margin-top:6px; line-height:1.4">{{ person.position }}</div>
+          <div style="font-size:12px; color:#444141; margin-top:2px">{{ person.dept }}</div>
+        </div>
+      </div>
+      <div style="margin-top:11px; padding-top:9px; border-top:1px solid rgba(32,30,29,.12); font-size:12px; color:#444141; line-height:1.6">
+        <div>{{ person.phone }}</div>
+        <div>{{ person.email }}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute; inset:0; background:rgba(45,43,43,.5); display:grid; place-items:center; padding:24px; z-index:60">
+      <div style="width:min(520px,100%); max-height:88vh; overflow:auto; background:#eae9e9; border-radius:4px; box-shadow:0 12px 32px rgba(45,43,43,.22); padding:22px">
+
+        <sc-if value="{{ modalApprove }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#006786">{{ sel.num }}</div>
+          <h2 style="margin:5px 0 0; font-size:21px; font-weight:600; line-height:1.2">{{ t.approve_title }}</h2>
+          <div style="font-size:14px; color:#444141; margin-top:7px; line-height:1.5">{{ sel.title }}</div>
+          <div style="margin-top:18px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#7d7979">{{ t.decision }}</div>
+          <div style="margin-top:9px; display:flex; flex-direction:column; gap:9px">
+            <sc-for list="{{ decisions }}" as="d" hint-placeholder-count="3">
+              <button onClick="{{ d.pick }}" style="{{ d.style }}">
+                <span style="{{ d.dot }}"></span>
+                <span style="text-align:left"><span style="display:block; font-size:14px; font-weight:600">{{ d.label }}</span><span style="display:block; font-size:12px; color:#605d5d; margin-top:2px">{{ d.note }}</span></span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="margin-top:16px; font-size:12px; color:#605d5d">{{ t.comment }}</div>
+          <textarea placeholder="{{ t.comment_ph }}" style="width:100%; min-height:78px; margin-top:5px; background:#f3f2f2; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; padding:9px 10px; resize:vertical"></textarea>
+          <div style="display:flex; gap:9px; margin-top:18px; flex-wrap:wrap">
+            <button onClick="{{ toSign }}" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.approve_sign }}</button>
+            <button onClick="{{ closeModal }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.cancel }}</button>
+          </div>
+          <div style="font-size:12px; color:#605d5d; margin-top:11px; line-height:1.5">{{ t.approve_note }}</div>
+        </sc-if>
+
+        <sc-if value="{{ modalSign }}" hint-placeholder-val="{{ false }}">
+          <h2 style="margin:0; font-size:21px; font-weight:600; line-height:1.2">{{ t.sign_title }}</h2>
+          <div style="font-size:14px; color:#444141; margin-top:7px; line-height:1.5">{{ t.sign_sub }}</div>
+          <div style="margin-top:16px; font-size:12px; color:#605d5d">{{ t.sign_key }}</div>
+          <select style="display:block; width:100%; margin-top:5px; min-height:40px; background:#f3f2f2; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; color:#201e1d; padding:7px 9px">
+            <option>AUTH_RSA256 · {{ me.name }} · УЦГО РК</option>
+            <option>RSA256 (подпись) · {{ me.name }} · УЦГО РК</option>
+          </select>
+          <div style="margin-top:12px; font-size:12px; color:#605d5d">{{ t.sign_pass }}</div>
+          <input type="password" value="••••••••" style="display:block; width:100%; margin-top:5px; min-height:40px; background:#f3f2f2; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:15px; letter-spacing:.2em; color:#201e1d; padding:7px 9px" />
+          <div style="margin-top:18px; background:#f3f2f2; border-radius:2px; padding:14px">
+            <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#7d7979">{{ t.sign_checks }}</div>
+            <sc-for list="{{ checks }}" as="c" hint-placeholder-count="5">
+              <div style="display:flex; gap:10px; align-items:baseline; padding:7px 0">
+                <span style="{{ c.markStyle }}">{{ c.mark }}</span>
+                <span style="flex:1; font-size:13px; line-height:1.4">{{ c.label }}</span>
+                <span style="{{ c.valStyle }}">{{ c.value }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; gap:9px; margin-top:18px; flex-wrap:wrap">
+            <button onClick="{{ doSign }}" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.sign }}</button>
+            <button onClick="{{ closeModal }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.cancel }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalSigned }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; gap:13px; align-items:flex-start">
+            <i class="ph-duotone ph-seal-check" style="font-size:30px; color:#006786; flex:none"></i>
+            <div>
+              <h2 style="margin:0; font-size:21px; font-weight:600; line-height:1.2">{{ t.signed_title }}</h2>
+              <div style="font-size:14px; color:#444141; margin-top:7px; line-height:1.55">{{ t.signed_body }}</div>
+            </div>
+          </div>
+          <div style="margin-top:18px; background:#f3f2f2; border-radius:2px; padding:14px; font-size:13px; line-height:1.9">
+            <sc-for list="{{ signResult }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex; gap:12px"><span style="flex:0 0 150px; color:#605d5d">{{ s.k }}</span><span style="flex:1">{{ s.v }}</span></div>
+            </sc-for>
+          </div>
+          <div style="background:#fff1f4; border-radius:2px; padding:13px; margin-top:14px; font-size:13px; color:#790e3d; line-height:1.5">{{ t.signed_warn }}</div>
+          <div style="display:flex; gap:9px; margin-top:18px; flex-wrap:wrap">
+            <button onClick="{{ closeModal }}" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.ready }}</button>
+            <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.download_sign }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalTest }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#006786">{{ t.test_kicker }}</div>
+          <h2 style="margin:5px 0 0; font-size:21px; font-weight:600; line-height:1.2">Основы противодействия коррупции</h2>
+          <div style="font-size:13px; color:#444141; margin-top:7px; line-height:1.5">{{ t.test_note }}</div>
+          <sc-for list="{{ testQuestions }}" as="q" hint-placeholder-count="2">
+            <div style="margin-top:18px">
+              <div style="font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#7d7979">{{ q.n }}</div>
+              <div style="font-size:15px; font-weight:600; margin:6px 0 10px; line-height:1.35">{{ q.q }}</div>
+              <sc-for list="{{ q.answers }}" as="a" hint-placeholder-count="3">
+                <button style="{{ a.style }}"><span style="{{ a.dot }}"></span>{{ a.label }}</button>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="display:flex; gap:9px; margin-top:18px; flex-wrap:wrap">
+            <button onClick="{{ finishTest }}" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.test_finish }}</button>
+            <button onClick="{{ closeModal }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.cancel }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalTestDone }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; gap:13px; align-items:flex-start">
+            <i class="ph-duotone ph-certificate" style="font-size:30px; color:#006786; flex:none"></i>
+            <div>
+              <h2 style="margin:0; font-size:21px; font-weight:600; line-height:1.2">{{ t.test_done_title }}</h2>
+              <div style="font-size:14px; color:#444141; margin-top:7px; line-height:1.55">{{ t.test_done_body }}</div>
+            </div>
+          </div>
+          <div style="margin-top:18px; background:#f3f2f2; padding:20px; text-align:center; border:1px solid rgba(32,30,29,.2)">
+            <div style="font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:#605d5d">{{ t.cert_head }}</div>
+            <div style="font-size:19px; font-weight:600; margin-top:10px; line-height:1.25">{{ me.name }}</div>
+            <div style="font-size:13px; color:#444141; margin-top:8px; line-height:1.5">{{ t.cert_body }}</div>
+            <div style="font-size:12px; color:#605d5d; margin-top:12px">{{ t.cert_meta }} · 18.09.2026</div>
+          </div>
+          <div style="display:flex; gap:9px; margin-top:18px; flex-wrap:wrap">
+            <button onClick="{{ closeModal }}" style="background:#0088b0; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.ready }}</button>
+            <button style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.download }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalReject }}" hint-placeholder-val="{{ false }}">
+          <h2 style="margin:0; font-size:21px; font-weight:600; line-height:1.2">{{ t.reject_title }}</h2>
+          <div style="font-size:14px; color:#444141; margin-top:7px; line-height:1.5">{{ sel.title }}</div>
+          <div style="margin-top:16px; font-size:12px; color:#605d5d">{{ t.reject_reason }}</div>
+          <textarea placeholder="{{ t.reject_ph }}" style="width:100%; min-height:96px; margin-top:5px; background:#f3f2f2; border:1px solid rgba(32,30,29,.16); border-radius:2px; font-size:14px; padding:9px 10px; resize:vertical"></textarea>
+          <div style="display:flex; gap:9px; margin-top:18px; flex-wrap:wrap">
+            <button onClick="{{ closeModal }}" style="background:#d6006c; color:#f3f2f2; border:0; font-weight:600; font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.reject_send }}</button>
+            <button onClick="{{ closeModal }}" style="background:transparent; border:1px solid rgba(32,30,29,.16); font-size:14px; padding:11px 16px; border-radius:2px; cursor:pointer">{{ t.cancel }}</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;employee&quot;,&quot;chief&quot;,&quot;hr&quot;],&quot;default&quot;:&quot;employee&quot;,&quot;tsType&quot;:&quot;'employee' | 'chief' | 'hr'&quot;,&quot;section&quot;:&quot;Демонстрация&quot;},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ru&quot;,&quot;kz&quot;],&quot;default&quot;:&quot;ru&quot;,&quot;tsType&quot;:&quot;'ru' | 'kz'&quot;,&quot;section&quot;:&quot;Демонстрация&quot;},&quot;monoMode&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Доступность&quot;},&quot;fontScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:1.4,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Доступность&quot;},&quot;showRating&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Демонстрация&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'dashboard',
+    role: this.props.defaultRole || 'employee',
+    lang: this.props.lang || 'ru',
+    mono: this.props.monoMode || false,
+    scale: this.props.fontScale || 1,
+    sortKey: 'date', sortDir: 'desc', groupBy: 'none', filterStatus: 'all', query: '',
+    selId: 1, tab: 'view', zoom: 100,
+    modal: null, notifOpen: false, person: null, px: 0, py: 0,
+    rapportView: 'list', submitted: false,
+    course: null, vndFolder: 'orders',
+    notif: { rapport: true, sign: true, vnd: true, academy: false, projects: true },
+    read: {},
+    form: { type: 'annual', from: '05.10.2026', to: '02.11.2026', days: '29', place: 'г. Алматы', substitute: 'Ким А.В., капитан полиции', reason: 'Согласно графику отпусков на 2026 год.' }
+  };
+
+  T = {
+    ru: {
+      org: 'Правоохранительный орган · Департамент по городу Астана',
+      brand: 'Единый корпоративный портал',
+      dateline: '18 сентября 2026, пятница',
+      sections: 'Разделы', help: 'Поддержка',
+      support: 'Служба сопровождения: вн. 40-12, круглосуточно.',
+      instruction: 'Инструкция пользователя',
+      search: 'Поиск по документам и сотрудникам',
+      role: 'Роль', role_employee: 'Сотрудник', role_chief: 'Руководитель', role_hr: 'Кадровая служба',
+      a11y_font: 'Увеличить шрифт', a11y_mono: 'Чёрно-белая тема',
+      ecp_line: 'ЭЦП действует до 14.10.2026 — 26 дней',
+      net_line: 'Связь с сервером 84 Мбит/с · OCSP, TSP доступны',
+      nav_dashboard: 'Личный кабинет', nav_documents: 'Документы', nav_rapports: 'Рапорты и заявки',
+      nav_academy: 'Академия', nav_vnd: 'Нормативные документы', nav_projects: 'Проектное управление',
+      nav_mobile: 'Мобильная версия',
+      nav_spravki: 'Справки', nav_ideas: 'Площадка предложений', nav_vvk: 'ВВК и медосмотр',
+      nav_journals: 'Журналы учёта', nav_surveys: 'Опросы и аттестация',
+      nav_orgstruct: 'Оргструктура', nav_settings: 'Настройки процессов',
+      nav_head_learn: 'Обучение и нормативка', nav_head_manage: 'Управление',
+      title_spravki: 'Справки', spravki_sub: 'Формируются по интеграции с 1С: Кадры, хранятся в личном кабинете',
+      title_ideas: 'Площадка предложений', ideas_sub: 'Подача, маршрутизация и рассмотрение предложений сотрудников',
+      title_vvk: 'ВВК и медицинское освидетельствование', vvk_sub: 'Направление, подписание, ознакомление и заключение комиссии',
+      title_journals: 'Журналы учёта оценок и посещений', journals_sub: 'Загрузка сотрудников по подразделениям, период, согласование и хранение',
+      title_surveys: 'Опросы и психолого-социологические исследования', surveys_sub: 'Анкеты с настройкой анонимности, шкалы интерпретации, аналитика по подразделениям',
+      title_orgstruct: 'Организационная структура', orgstruct_sub: 'Иерархия подразделений, руководители и рабочие группы',
+      title_settings: 'Настройки процессов', settings_sub: 'Этапы, статусы, роли и доступные решения на каждом этапе',
+      sp_request: 'Запросить справку', sp_ready: 'Скачать', sp_col_type: 'Вид справки', sp_col_date: 'Дата запроса', sp_col_source: 'Источник данных',
+      sp_note: 'Запрос уходит в 1С: Кадры, справка формируется автоматически и подписывается ЭЦП кадровой службы.',
+      idea_new: 'Подать предложение', idea_theme: 'Тема', idea_service: 'Служба-получатель', idea_text: 'Суть предложения',
+      idea_my: 'Мои предложения', idea_send: 'Направить предложение',
+      vvk_new: 'Сформировать направление', vvk_concl: 'Заключение', vvk_ack: 'Ознакомление',
+      j_period: 'Период', j_dept: 'Подразделение', j_load: 'Загрузить сотрудников', j_new: 'Создать журнал',
+      sv_new: 'Создать анкету', sv_anon: 'Анонимность', sv_scale: 'Шкалы интерпретации', sv_export: 'Экспорт в XLSX',
+      org_groups: 'Рабочие группы', org_head: 'Руководитель', org_staff: 'Штат',
+      set_stage: 'Этап', set_roles: 'Роли', set_decisions: 'Решения', set_deadline: 'Срок', set_process: 'Процесс',
+      form_title_appoint: 'Рапорт на назначение (перемещение)', form_title_dismiss: 'Рапорт на увольнение',
+      f_cur_pos: 'Текущая должность', f_rank: 'Специальное звание', f_new_pos: 'Предлагаемая должность',
+      f_appoint_date: 'Дата назначения', f_kind: 'Вид процесса', f_justify: 'Обоснование',
+      f_dismiss_reason: 'Основание увольнения', f_dismiss_date: 'Дата увольнения', f_seniority: 'Выслуга лет',
+      f_handover: 'Сдача служебного удостоверения, оружия и имущества', f_explain: 'Пояснение',
+      idea_theme_ph: 'Коротко о сути предложения', idea_text_ph: 'Что предлагается изменить, какой ожидается эффект',
+      test_kicker: 'Итоговое тестирование', test_note: 'Прохождение подтверждено ЭЦП. Проходной балл — 80 %. При неуспешной сдаче курс можно пройти повторно.',
+      test_finish: 'Завершить тестирование', test_done_title: 'Тестирование пройдено: 92 %',
+      test_done_body: 'Сертификат сформирован автоматически и сохранён в личном кабинете. Данные о прохождении переданы в отчётность кадровой службы.',
+      title_dashboard: 'Личный кабинет', dash_sub: 'Сводка по вашим документам, срокам и обучению',
+      title_documents: 'Документы', title_rapports: 'Рапорты и заявки', title_academy: 'Академия',
+      title_vnd: 'Внутренние нормативные документы', title_projects: 'Проектное управление',
+      title_mobile: 'Мобильная версия',
+      position: 'Должность', dept: 'Подразделение', tenure: 'Стаж службы', phone: 'Телефон',
+      rating: 'Цифровой рейтинг', rating_note: 'исполнительская дисциплина за 2026 год',
+      ecp_title: 'Срок действия ЭЦП истекает', ecp_check: 'Проверить сертификат',
+      ecp_body: 'До окончания действия ключа УЦГО РК осталось 26 дней. Обратитесь в ЦОН для перевыпуска — иначе подписание станет недоступно.',
+      deadlines: 'Контрольные сроки',
+      block_rapports: 'Мои рапорты', block_vacations: 'Предстоящие отпуска', block_courses: 'Повышение квалификации',
+      block_news: 'Приказы и новости', all_link: 'Все', to_academy: 'Перейти в Академию',
+      vac_balance: 'Остаток дней ежегодного трудового отпуска: 29 из 45.',
+      new_vacation: 'Подать рапорт на отпуск',
+      chief_queue: 'На моём согласовании', chief_queue_sub: '7 документов, 2 с истекающим сроком',
+      hr_summary: 'Сводка по подразделениям',
+      col_dept: 'Подразделение', col_staff: 'Штат', col_rapports: 'Рапортов', col_antikor: 'Антикоррупционный курс', col_vvk: 'ВВК просрочено',
+      export_xls: 'Экспорт в XLSX',
+      create: 'Создать', open: 'Открыть', preview: 'Просмотр', compare: 'Сравнить', send: 'Отправить',
+      approve: 'Согласовать', sign: 'Подписать ЭЦП', reject: 'Отклонить', download: 'Скачать',
+      download_note: 'Скачивание доступно в оригинале или с наложением отметки о подписании, даты регистрации и водяного знака.',
+      group_by: 'Группировка', group_none: 'Без группировки', group_type: 'По типу документа', group_status: 'По статусу', group_dept: 'По подразделению',
+      filter_status: 'Статус', all: 'Все статусы',
+      table_hint: 'Нажмите на заголовок столбца для сортировки',
+      col_num: 'Документ', col_author: 'Автор', col_ver: 'Версия', col_status: 'Статус', col_date: 'Дата',
+      st_draft: 'Черновик', st_review: 'На согласовании', st_signed: 'Подписан', st_rejected: 'Отклонён', st_executed: 'Исполнен',
+      tab_view: 'Просмотр', tab_versions: 'Версии', tab_files: 'Вложения', tab_comments: 'Комментарии', tab_links: 'Связи', tab_route: 'Лист согласования',
+      preview_hint: 'docx · встроенный редактор доступен',
+      comment_ph: 'Комментарий к документу или к вложению',
+      files_limits: 'Ограничения: имя файла 3–30 символов, до 10 МБ на файл, до 95 МБ и 80 файлов на карточку.',
+      notifications: 'Центр уведомлений', notif_settings: 'Уведомления по процессам', close: 'Закрыть',
+      new_rapport: 'Новый рапорт', my_submitted: 'Поданные рапорты',
+      form_title: 'Рапорт на отпуск', form_sub: 'Данные подтягиваются из 1С: Кадры. Проверьте и отправьте на согласование.',
+      f_type: 'Вид отпуска', f_from: 'Дата начала', f_to: 'Дата окончания', f_days: 'Календарных дней',
+      f_place: 'Место проведения', f_substitute: 'Замещающий сотрудник', f_reason: 'Основание',
+      f_attach: 'Вложения: график отпусков, подтверждающие документы', f_attach_btn: 'Прикрепить',
+      f_balance: 'Остаток: 29 дней. Материальная помощь к отпуску начисляется автоматически приказом.',
+      f_submit: 'Отправить на согласование', f_draft: 'Сохранить черновик',
+      route_title: 'Маршрут согласования', route_note: 'Маршрут сформирован автоматически по типу рапорта и подразделению.',
+      route_1c: 'После подписания приказ регистрируется и передаётся в 1С: Кадры по интеграции.',
+      done_title: 'Рапорт зарегистрирован', done_body: 'Рапорт № РП-2026/431 от 18.09.2026 направлен непосредственному руководителю. Уведомления о каждом этапе придут в центр уведомлений.',
+      done_next: 'Дальнейшие этапы', done_open: 'Открыть карточку рапорта', done_back: 'К списку рапортов',
+      academy_sub: 'Каталог курсов, обязательное обучение и сертификаты',
+      course_modules: 'Модули курса', course_progress: 'Прогресс прохождения',
+      course_ecp_note: 'Перед итоговым тестированием требуется подтверждение условий прохождения курса с помощью ЭЦП.',
+      course_test: 'Пройти итоговое тестирование', certificate: 'Сертификат',
+      cert_head: 'Электронный сертификат', cert_body: 'прошёл курс «Основы противодействия коррупции. Требования антикоррупционного законодательства РК»',
+      cert_meta: 'Выдан Службой противодействия коррупции КНБ РК · № 2026/АК-4471',
+      cert_note: 'Сертификат формируется автоматически после успешного тестирования и хранится в личном кабинете.',
+      vnd_sub: 'Разработка, согласование, ознакомление и постановка на утрату',
+      vnd_folders: 'Папки по видам',
+      projects_sub: 'Протокольные поручения, проекты, вехи и задачи',
+      pm_status: 'Статус', pm_author: 'Автор поручения', pm_due: 'Срок',
+      pm_confirm: 'Согласовать проект', pm_extend: 'Запросить продление',
+      approve_title: 'Согласование документа', decision: 'Решение', comment: 'Комментарий',
+      approve_sign: 'Согласовать и подписать ЭЦП', cancel: 'Отмена',
+      approve_note: 'Решение фиксируется в листе согласования с отметкой времени и результатом проверки ЭЦП.',
+      sign_title: 'Подписание ЭЦП', sign_sub: 'Ключ УЦГО РК из контейнера закрытого ключа. Подпись формируется в формате CMS / PKCS#7.',
+      sign_key: 'Ключ подписи', sign_pass: 'Пароль к контейнеру', sign_checks: 'Проверка сертификата',
+      signed_title: 'Документ подписан', signed_body: 'Подпись сформирована и проверена. Документ зарегистрирован и направлен следующему участнику маршрута.',
+      signed_warn: 'Срок действия сертификата истекает через 26 дней — рекомендуем перевыпустить ключ.',
+      ready: 'Готово', download_sign: 'Скачать файл подписи',
+      reject_title: 'Отклонить документ', reject_reason: 'Причина отклонения',
+      reject_ph: 'Причина будет направлена автору и зафиксирована в листе согласования',
+      reject_send: 'Отклонить и вернуть автору',
+      mobile_sub: 'Ключевые сценарии на смартфоне: 390 pt, элементы управления не меньше 44 pt',
+      m_signal: 'LTE', m_cap1: 'Личный кабинет: карточка, срок ЭЦП, статусы рапортов',
+      m_cap2: 'Рапорт на отпуск с маршрутом согласования',
+      m_cap3: 'Подписание ЭЦП в нижней панели, без перехода на новую страницу',
+      m_doc_line: 'Рапорт на ежегодный трудовой отпуск · РП-2026/412',
+      vac_annual: 'Оплачиваемый ежегодный трудовой отпуск'
+    },
+    kz: {
+      org: 'Құқық қорғау органы · Астана қаласы бойынша департамент',
+      brand: 'Бірыңғай корпоративтік портал',
+      dateline: '2026 жылғы 18 қыркүйек, жұма',
+      sections: 'Бөлімдер', help: 'Қолдау',
+      support: 'Сүйемелдеу қызметі: ішкі 40-12, тәулік бойы.',
+      instruction: 'Пайдаланушы нұсқаулығы',
+      search: 'Құжаттар мен қызметкерлерден іздеу',
+      role: 'Рөл', role_employee: 'Қызметкер', role_chief: 'Басшы', role_hr: 'Кадр қызметі',
+      a11y_font: 'Қаріпті үлкейту', a11y_mono: 'Ақ-қара тақырып',
+      ecp_line: 'ЭЦҚ 14.10.2026 дейін жарамды — 26 күн',
+      net_line: 'Сервермен байланыс 84 Мбит/с · OCSP, TSP қолжетімді',
+      nav_dashboard: 'Жеке кабинет', nav_documents: 'Құжаттар', nav_rapports: 'Рапорттар мен өтінімдер',
+      nav_academy: 'Академия', nav_vnd: 'Ішкі нормативтік құжаттар', nav_projects: 'Жобаларды басқару',
+      nav_mobile: 'Мобильді нұсқа',
+      nav_spravki: 'Анықтамалар', nav_ideas: 'Ұсыныстар алаңы', nav_vvk: 'ӘДК және медтексеру',
+      nav_journals: 'Есеп журналдары', nav_surveys: 'Сауалнамалар мен аттестаттау',
+      nav_orgstruct: 'Ұйымдық құрылым', nav_settings: 'Процесс параметрлері',
+      nav_head_learn: 'Оқыту және нормативтік база', nav_head_manage: 'Басқару',
+      title_spravki: 'Анықтамалар', spravki_sub: '1С: Кадры жүйесімен интеграция арқылы құрылып, жеке кабинетте сақталады',
+      title_ideas: 'Ұсыныстар алаңы', ideas_sub: 'Қызметкерлер ұсыныстарын беру, бағыттау және қарау',
+      title_vvk: 'ӘДК және медициналық куәландыру', vvk_sub: 'Жолдама, қол қою, танысу және комиссия қорытындысы',
+      title_journals: 'Бағалар мен қатысу есебінің журналдары', journals_sub: 'Бөлімшелер бойынша қызметкерлерді жүктеу, кезең, келісу және сақтау',
+      title_surveys: 'Сауалнамалар мен психологиялық-әлеуметтік зерттеулер', surveys_sub: 'Анонимдік параметрлері бар сауалнамалар, интерпретация шкалалары, бөлімшелер бойынша талдау',
+      title_orgstruct: 'Ұйымдық құрылым', orgstruct_sub: 'Бөлімшелер иерархиясы, басшылар және жұмыс топтары',
+      title_settings: 'Процесс параметрлері', settings_sub: 'Кезеңдер, мәртебелер, рөлдер және әр кезеңдегі шешімдер',
+      sp_request: 'Анықтама сұрау', sp_ready: 'Жүктеу', sp_col_type: 'Анықтама түрі', sp_col_date: 'Сұрау күні', sp_col_source: 'Дерек көзі',
+      sp_note: 'Сұрау 1С: Кадры жүйесіне жіберіледі, анықтама автоматты құрылып, кадр қызметінің ЭЦҚ-сымен қол қойылады.',
+      idea_new: 'Ұсыныс беру', idea_theme: 'Тақырып', idea_service: 'Алушы қызмет', idea_text: 'Ұсыныстың мазмұны',
+      idea_my: 'Менің ұсыныстарым', idea_send: 'Ұсынысты жіберу',
+      vvk_new: 'Жолдама қалыптастыру', vvk_concl: 'Қорытынды', vvk_ack: 'Танысу',
+      j_period: 'Кезең', j_dept: 'Бөлімше', j_load: 'Қызметкерлерді жүктеу', j_new: 'Журнал жасау',
+      sv_new: 'Сауалнама жасау', sv_anon: 'Анонимдік', sv_scale: 'Интерпретация шкалалары', sv_export: 'XLSX-ке экспорт',
+      org_groups: 'Жұмыс топтары', org_head: 'Басшы', org_staff: 'Штат',
+      set_stage: 'Кезең', set_roles: 'Рөлдер', set_decisions: 'Шешімдер', set_deadline: 'Мерзім', set_process: 'Процесс',
+      form_title_appoint: 'Тағайындауға (ауыстыруға) рапорт', form_title_dismiss: 'Қызметтен босатуға рапорт',
+      f_cur_pos: 'Ағымдағы лауазымы', f_rank: 'Арнаулы атағы', f_new_pos: 'Ұсынылатын лауазым',
+      f_appoint_date: 'Тағайындау күні', f_kind: 'Процесс түрі', f_justify: 'Негіздеме',
+      f_dismiss_reason: 'Босату негізі', f_dismiss_date: 'Босату күні', f_seniority: 'Қызмет өтілі',
+      f_handover: 'Қызметтік куәлікті, қаруды және мүлікті тапсыру', f_explain: 'Түсіндірме',
+      idea_theme_ph: 'Ұсыныстың мәні қысқаша', idea_text_ph: 'Нені өзгертуді ұсынасыз, қандай нәтиже күтіледі',
+      test_kicker: 'Қорытынды тестілеу', test_note: 'Өту ЭЦҚ-мен расталған. Өту балы — 80 %. Сәтсіз тапсырған жағдайда курсты қайта өтуге болады.',
+      test_finish: 'Тестілеуді аяқтау', test_done_title: 'Тестілеуден өтті: 92 %',
+      test_done_body: 'Сертификат автоматты құрылып, жеке кабинетте сақталды. Өту туралы деректер кадр қызметінің есептілігіне берілді.',
+      title_dashboard: 'Жеке кабинет', dash_sub: 'Құжаттарыңыз, мерзімдер және оқыту бойынша жиынтық',
+      title_documents: 'Құжаттар', title_rapports: 'Рапорттар мен өтінімдер', title_academy: 'Академия',
+      title_vnd: 'Ішкі нормативтік құжаттар', title_projects: 'Жобаларды басқару',
+      title_mobile: 'Мобильді нұсқа',
+      position: 'Лауазымы', dept: 'Бөлімше', tenure: 'Қызмет өтілі', phone: 'Телефон',
+      rating: 'Цифрлық рейтинг', rating_note: '2026 жылғы орындау тәртібі',
+      ecp_title: 'ЭЦҚ жарамдылық мерзімі бітуде', ecp_check: 'Сертификатты тексеру',
+      ecp_body: 'МО КО РК кілтінің жарамдылығына 26 күн қалды. Қайта шығару үшін ХҚКО-ға хабарласыңыз.',
+      deadlines: 'Бақылау мерзімдері',
+      block_rapports: 'Менің рапорттарым', block_vacations: 'Жақындағы демалыстар', block_courses: 'Біліктілікті арттыру',
+      block_news: 'Бұйрықтар мен жаңалықтар', all_link: 'Барлығы', to_academy: 'Академияға өту',
+      vac_balance: 'Жыл сайынғы еңбек демалысының қалдығы: 45 күннен 29 күн.',
+      new_vacation: 'Демалысқа рапорт беру',
+      chief_queue: 'Менің келісуімде', chief_queue_sub: '7 құжат, 2-уінің мерзімі бітуде',
+      hr_summary: 'Бөлімшелер бойынша жиынтық',
+      col_dept: 'Бөлімше', col_staff: 'Штат', col_rapports: 'Рапорт', col_antikor: 'Сыбайлас жемқорлыққа қарсы курс', col_vvk: 'ӘДК мерзімі өткен',
+      export_xls: 'XLSX-ке экспорт',
+      create: 'Жасау', open: 'Ашу', preview: 'Қарау', compare: 'Салыстыру', send: 'Жіберу',
+      approve: 'Келісу', sign: 'ЭЦҚ-мен қол қою', reject: 'Қайтару', download: 'Жүктеу',
+      download_note: 'Түпнұсқа түрінде немесе қол қою белгісі, тіркеу күні және су таңбасы қойылған түрде жүктеуге болады.',
+      group_by: 'Топтау', group_none: 'Топтаусыз', group_type: 'Құжат түрі бойынша', group_status: 'Мәртебе бойынша', group_dept: 'Бөлімше бойынша',
+      filter_status: 'Мәртебе', all: 'Барлық мәртебе',
+      table_hint: 'Сұрыптау үшін баған тақырыбын басыңыз',
+      col_num: 'Құжат', col_author: 'Автор', col_ver: 'Нұсқа', col_status: 'Мәртебе', col_date: 'Күні',
+      st_draft: 'Жоба', st_review: 'Келісуде', st_signed: 'Қол қойылған', st_rejected: 'Қайтарылған', st_executed: 'Орындалған',
+      tab_view: 'Қарау', tab_versions: 'Нұсқалар', tab_files: 'Тіркемелер', tab_comments: 'Түсініктемелер', tab_links: 'Байланыстар', tab_route: 'Келісу парағы',
+      preview_hint: 'docx · ішкі редактор қолжетімді',
+      comment_ph: 'Құжатқа немесе тіркемеге түсініктеме',
+      files_limits: 'Шектеулер: файл атауы 3–30 таңба, файлға 10 МБ дейін, картаға 95 МБ және 80 файл дейін.',
+      notifications: 'Хабарламалар орталығы', notif_settings: 'Процестер бойынша хабарламалар', close: 'Жабу',
+      new_rapport: 'Жаңа рапорт', my_submitted: 'Берілген рапорттар',
+      form_title: 'Демалысқа рапорт', form_sub: 'Деректер 1С: Кадры жүйесінен алынады. Тексеріп, келісуге жіберіңіз.',
+      f_type: 'Демалыс түрі', f_from: 'Басталу күні', f_to: 'Аяқталу күні', f_days: 'Күнтізбелік күн',
+      f_place: 'Өткізу орны', f_substitute: 'Алмастыратын қызметкер', f_reason: 'Негіздеме',
+      f_attach: 'Тіркемелер: демалыс кестесі, растайтын құжаттар', f_attach_btn: 'Тіркеу',
+      f_balance: 'Қалдық: 29 күн. Демалысқа материалдық көмек бұйрықпен есептеледі.',
+      f_submit: 'Келісуге жіберу', f_draft: 'Жобаны сақтау',
+      route_title: 'Келісу маршруты', route_note: 'Маршрут рапорт түрі мен бөлімше бойынша автоматты құрылды.',
+      route_1c: 'Қол қойылғаннан кейін бұйрық тіркеліп, 1С: Кадры жүйесіне беріледі.',
+      done_title: 'Рапорт тіркелді', done_body: '18.09.2026 № РП-2026/431 рапорт тікелей басшыға жіберілді. Әрбір кезең туралы хабарлама келеді.',
+      done_next: 'Келесі кезеңдер', done_open: 'Рапорт картасын ашу', done_back: 'Рапорттар тізіміне',
+      academy_sub: 'Курстар каталогы, міндетті оқыту және сертификаттар',
+      course_modules: 'Курс модульдері', course_progress: 'Өту барысы',
+      course_ecp_note: 'Қорытынды тестілеу алдында курс шарттарын ЭЦҚ-мен растау қажет.',
+      course_test: 'Қорытынды тестілеуден өту', certificate: 'Сертификат',
+      cert_head: 'Электрондық сертификат', cert_body: '«Сыбайлас жемқорлыққа қарсы іс-қимыл негіздері. ҚР заңнамасының талаптары» курсын өтті',
+      cert_meta: 'ҚР ҰҚК Сыбайлас жемқорлыққа қарсы қызметі берген · № 2026/АК-4471',
+      cert_note: 'Сертификат сәтті тестілеуден кейін автоматты құрылып, жеке кабинетте сақталады.',
+      vnd_sub: 'Әзірлеу, келісу, танысу және күшін жою',
+      vnd_folders: 'Түрлері бойынша қалталар',
+      projects_sub: 'Хаттамалық тапсырмалар, жобалар, кезеңдер мен міндеттер',
+      pm_status: 'Мәртебе', pm_author: 'Тапсырма авторы', pm_due: 'Мерзім',
+      pm_confirm: 'Жобаны келісу', pm_extend: 'Мерзімді ұзартуды сұрау',
+      approve_title: 'Құжатты келісу', decision: 'Шешім', comment: 'Түсініктеме',
+      approve_sign: 'Келісіп, ЭЦҚ қою', cancel: 'Бас тарту',
+      approve_note: 'Шешім келісу парағында уақыт белгісімен және ЭЦҚ тексеру нәтижесімен тіркеледі.',
+      sign_title: 'ЭЦҚ қою', sign_sub: 'Жабық кілт контейнеріндегі МО КО РК кілті. Қол CMS / PKCS#7 форматында құрылады.',
+      sign_key: 'Қол қою кілті', sign_pass: 'Контейнер паролі', sign_checks: 'Сертификатты тексеру',
+      signed_title: 'Құжатқа қол қойылды', signed_body: 'Қол құрылып, тексерілді. Құжат тіркеліп, маршруттың келесі қатысушысына жіберілді.',
+      signed_warn: 'Сертификаттың мерзімі 26 күннен кейін бітеді — кілтті қайта шығаруды ұсынамыз.',
+      ready: 'Дайын', download_sign: 'Қол файлын жүктеу',
+      reject_title: 'Құжатты қайтару', reject_reason: 'Қайтару себебі',
+      reject_ph: 'Себеп авторға жіберіліп, келісу парағында тіркеледі',
+      reject_send: 'Қайтару және авторға жіберу',
+      mobile_sub: 'Смартфондағы негізгі сценарийлер: 390 pt, басқару элементтері 44 pt-тан кем емес',
+      m_signal: 'LTE', m_cap1: 'Жеке кабинет: карта, ЭЦҚ мерзімі, рапорт мәртебелері',
+      m_cap2: 'Келісу маршруты көрсетілген демалыс рапорты',
+      m_cap3: 'ЭЦҚ қою төменгі панельде, жаңа бетке өтпей',
+      m_doc_line: 'Жыл сайынғы еңбек демалысына рапорт · РП-2026/412',
+      vac_annual: 'Ақы төленетін жыл сайынғы еңбек демалысы'
+    }
+  };
+
+  ST = {
+    draft:    { ru: 'Черновик', kz: 'Жоба', bg: '#f8f4f4', fg: '#444141', dot: '#9b9797' },
+    review:   { ru: 'На согласовании', kz: 'Келісуде', bg: '#e9f8ff', fg: '#004961', dot: '#0088b0' },
+    signed:   { ru: 'Подписан', kz: 'Қол қойылған', bg: '#cbeeff', fg: '#0a303e', dot: '#006786' },
+    rejected: { ru: 'Отклонён', kz: 'Қайтарылған', bg: '#fff1f4', fg: '#790e3d', dot: '#d6006c' },
+    executed: { ru: 'Исполнен', kz: 'Орындалған', bg: '#eae7e7', fg: '#2d2b2b', dot: '#2d2b2b' }
+  };
+
+  PEOPLE = {
+    serikov: { name: 'Сериков Нурлан Ерболатович', short: 'Сериков Н. Е.', rank: 'майор полиции', position: 'Старший инспектор отдела кадров', dept: 'Управление кадровой работы', phone: 'вн. 40-58 · +7 701 ХХХ ХХ ХХ', email: 'n.serikov@dept.gov.kz' },
+    abenova: { name: 'Абенова Гульмира Сериковна', short: 'Абенова Г. С.', rank: 'подполковник полиции', position: 'Начальник управления кадровой работы', dept: 'Управление кадровой работы', phone: 'вн. 40-02', email: 'g.abenova@dept.gov.kz' },
+    zhumagulov: { name: 'Жумагулов Данияр Талгатович', short: 'Жумагулов Д. Т.', rank: 'полковник полиции', position: 'Заместитель начальника департамента', dept: 'Руководство департамента', phone: 'вн. 40-01', email: 'd.zhumagulov@dept.gov.kz' },
+    kim: { name: 'Ким Алексей Владимирович', short: 'Ким А. В.', rank: 'капитан полиции', position: 'Инспектор отдела кадров', dept: 'Управление кадровой работы', phone: 'вн. 40-61', email: 'a.kim@dept.gov.kz' },
+    ospanov: { name: 'Оспанов Ринат Маратович', short: 'Оспанов Р. М.', rank: 'майор полиции', position: 'Психолог-специалист', dept: 'Отдел психологического обеспечения', phone: 'вн. 40-77', email: 'r.ospanov@dept.gov.kz' }
+  };
+
+  DOCS = [
+    { id: 1, num: 'РП-2026/412', title: 'Рапорт на ежегодный трудовой отпуск', type: 'Рапорт', author: 'serikov', ver: 'v2', status: 'review', date: '16.09.2026', icon: 'ph-file-text', dept: 'Управление кадровой работы' },
+    { id: 2, num: 'ПР-1180', title: 'Приказ о предоставлении отпуска (проект)', type: 'Приказ', author: 'abenova', ver: 'v1', status: 'draft', date: '17.09.2026', icon: 'ph-scroll', dept: 'Управление кадровой работы' },
+    { id: 3, num: 'ВВК-233', title: 'Направление на военно-врачебную комиссию', type: 'Направление', author: 'kim', ver: 'v1', status: 'signed', date: '12.09.2026', icon: 'ph-first-aid-kit', dept: 'Управление кадровой работы' },
+    { id: 4, num: 'РП-2026/388', title: 'Рапорт на назначение (перемещение)', type: 'Рапорт', author: 'kim', ver: 'v3', status: 'signed', date: '09.09.2026', icon: 'ph-file-text', dept: 'Отдел следствия' },
+    { id: 5, num: 'ВНД-27', title: 'Регламент электронного документооборота', type: 'ВНД', author: 'abenova', ver: 'v4', status: 'review', date: '15.09.2026', icon: 'ph-books', dept: 'Руководство департамента' },
+    { id: 6, num: 'ПП-14', title: 'Протокольное поручение № 14 от 02.09.2026', type: 'Протокол', author: 'zhumagulov', ver: 'v1', status: 'executed', date: '02.09.2026', icon: 'ph-clipboard-text', dept: 'Руководство департамента' },
+    { id: 7, num: 'СП-9042', title: 'Справка с места работы', type: 'Справка', author: 'serikov', ver: 'v1', status: 'executed', date: '14.09.2026', icon: 'ph-certificate', dept: 'Управление кадровой работы' },
+    { id: 8, num: 'РП-2026/351', title: 'Рапорт на увольнение по собственному желанию', type: 'Рапорт', author: 'kim', ver: 'v2', status: 'rejected', date: '28.08.2026', icon: 'ph-file-text', dept: 'Отдел следствия' },
+    { id: 9, num: 'АТ-77', title: 'Итоговый протокол результатов аттестации', type: 'Протокол', author: 'ospanov', ver: 'v2', status: 'review', date: '11.09.2026', icon: 'ph-clipboard-text', dept: 'Отдел психологического обеспечения' },
+    { id: 10, num: 'ЖФ-63', title: 'Ведомость по физической подготовке за III квартал', type: 'Журнал', author: 'ospanov', ver: 'v1', status: 'signed', date: '05.09.2026', icon: 'ph-list-checks', dept: 'Отдел боевой подготовки' }
+  ];
+
+  t() { return this.T[this.state.lang]; }
+  stLabel(k) { return this.ST[k][this.state.lang]; }
+  badge(k) {
+    const s = this.ST[k];
+    return { pill: 'display:inline-flex; align-items:center; gap:6px; flex:0 0 auto; font-size:11px; letter-spacing:.02em; padding:4px 10px; border-radius:2px; background:' + s.bg + '; color:' + s.fg, dot: 'width:7px; height:7px; border-radius:50%; background:' + s.dot + '; flex:none' };
+  }
+  node(kind) {
+    if (kind === 'done') return { s: 'width:22px; height:22px; flex:none; border-radius:50%; background:#0088b0; color:#f3f2f2; font-size:12px; display:grid; place-items:center', i: '✓' };
+    if (kind === 'now') return { s: 'width:22px; height:22px; flex:none; border-radius:50%; border:2px solid #0088b0; color:#006786; font-size:11px; font-weight:600; display:grid; place-items:center', i: '●' };
+    if (kind === 'bad') return { s: 'width:22px; height:22px; flex:none; border-radius:50%; background:#d6006c; color:#f3f2f2; font-size:12px; display:grid; place-items:center', i: '×' };
+    return { s: 'width:22px; height:22px; flex:none; border-radius:50%; border:1px solid #bab6b6; color:#7d7979; font-size:11px; display:grid; place-items:center', i: '' };
+  }
+  bar(pct, color) { return 'height:100%; width:' + pct + '%; background:' + (color || '#0088b0') + '; border-radius:1px'; }
+  set(k, v) { this.setState({ [k]: v }); }
+
+  renderVals() {
+    const s = this.state, t = this.t(), me = this.PEOPLE.serikov;
+    const nav = [
+      ['dashboard', 'ph-identification-card', t.nav_dashboard, ''],
+      ['documents', 'ph-folders', t.nav_documents, s.role === 'chief' ? '7' : '3'],
+      ['rapports', 'ph-file-text', t.nav_rapports, ''],
+      ['spravki', 'ph-certificate', t.nav_spravki, ''],
+      ['ideas', 'ph-lightbulb', t.nav_ideas, ''],
+      ['vvk', 'ph-first-aid-kit', t.nav_vvk, ''],
+      ['head2', '', t.nav_head_learn, ''],
+      ['academy', 'ph-graduation-cap', t.nav_academy, '1'],
+      ['vnd', 'ph-books', t.nav_vnd, '2'],
+      ['journals', 'ph-list-checks', t.nav_journals, ''],
+      ['surveys', 'ph-chart-bar', t.nav_surveys, ''],
+      ['head3', '', t.nav_head_manage, ''],
+      ['projects', 'ph-kanban', t.nav_projects, ''],
+      ['orgstruct', 'ph-tree-structure', t.nav_orgstruct, ''],
+      ['settings', 'ph-sliders', t.nav_settings, ''],
+      ['mobile', 'ph-device-mobile', t.nav_mobile, '']
+    ];
+    const navItems = nav.map(([id, icon, label, badge]) => {
+      const on = s.screen === id, head = id.indexOf('head') === 0;
+      if (head) return {
+        label, icon: '', badge: '',
+        go: () => {},
+        style: 'display:flex; align-items:center; width:100%; padding:18px 12px 6px; background:transparent; border:0; font:inherit; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:#7d7979; cursor:default; text-align:left',
+        bar: 'display:none', badgeStyle: 'display:none'
+      };
+      return {
+        label, icon, badge,
+        go: () => this.setState({ screen: id, notifOpen: false, course: null, rapportView: 'list' }),
+        style: 'position:relative; display:flex; align-items:center; gap:11px; width:100%; min-height:42px; padding:9px 12px; background:' + (on ? '#eae9e9' : 'transparent') + '; border:0; border-radius:2px; cursor:pointer; font:inherit; font-size:14px; font-weight:' + (on ? 600 : 400) + '; color:' + (on ? '#006786' : '#201e1d'),
+        bar: 'position:absolute; left:0; top:7px; bottom:7px; width:3px; background:' + (on ? '#0088b0' : 'transparent'),
+        badgeStyle: badge ? 'font-size:11px; min-width:19px; height:19px; padding:0 5px; border-radius:2px; background:#d6006c; color:#f3f2f2; display:grid; place-items:center' : 'display:none'
+      };
+    });
+
+    const roles = [['employee', t.role_employee], ['chief', t.role_chief], ['hr', t.role_hr]].map(([id, label]) => ({
+      label, pick: () => this.setState({ role: id, screen: 'dashboard' }),
+      style: 'background:' + (s.role === id ? '#201e1d' : 'transparent') + '; color:' + (s.role === id ? '#f3f2f2' : '#444141') + '; border:1px solid ' + (s.role === id ? '#201e1d' : 'rgba(32,30,29,.2)') + '; border-radius:2px; font:inherit; font-size:12px; padding:4px 10px; cursor:pointer; margin-right:5px'
+    }));
+
+    let docs = this.DOCS.filter(d => s.filterStatus === 'all' || d.status === s.filterStatus);
+    if (s.query.trim()) {
+      const q = s.query.trim().toLowerCase();
+      docs = docs.filter(d => (d.title + ' ' + d.num + ' ' + this.PEOPLE[d.author].name).toLowerCase().includes(q));
+    }
+    const key = s.sortKey, dir = s.sortDir === 'asc' ? 1 : -1;
+    const val = d => key === 'author' ? this.PEOPLE[d.author].name : key === 'status' ? this.stLabel(d.status) : key === 'date' ? d.date.split('.').reverse().join('') : String(d[key] || d.title);
+    docs = docs.slice().sort((a, b) => val(a) > val(b) ? dir : val(a) < val(b) ? -dir : 0);
+
+    const COL = { num: '3 1 150px', author: '1 1 96px', ver: '0 0 48px', status: '0 0 116px', date: '0 0 76px' };
+    const mkDoc = d => {
+      const b = this.badge(d.status), p = this.PEOPLE[d.author], on = d.id === s.selId;
+      return {
+        isDoc: true, isGroup: false, icon: d.icon, title: d.title, num: d.num, type: d.type, ver: d.ver, date: d.date,
+        author: p.short, weight: on ? 600 : 400,
+        stLabel: this.stLabel(d.status), stStyle: b.pill + '; flex:' + COL.status + '; overflow:hidden', dotStyle: b.dot,
+        trStyle: 'padding:11px 0; border-bottom:1px solid rgba(32,30,29,.08); background:' + (on ? '#e9f8ff' : 'transparent'),
+        titleStyle: 'flex:' + COL.num + '; min-width:0; background:transparent; border:0; padding:0; text-align:left; cursor:pointer; font:inherit; display:flex; gap:10px; align-items:flex-start',
+        authorStyle: 'flex:' + COL.author + '; min-width:0; text-align:left; background:transparent; border:0; border-bottom:1px dotted #7d7979; font:inherit; font-size:13px; cursor:help; padding:0 0 1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis',
+        verStyle: 'flex:' + COL.ver + '; font-size:13px; color:#444141',
+        dateStyle: 'flex:' + COL.date + '; font-size:13px; color:#605d5d',
+        select: () => this.setState({ selId: d.id, tab: 'view' }),
+        hoverIn: e => this.setState({ person: p, px: e.clientX, py: e.clientY })
+      };
+    };
+    let docRows = [];
+    if (s.groupBy === 'none') docRows = docs.map(mkDoc);
+    else {
+      const keyOf = d => s.groupBy === 'type' ? d.type : s.groupBy === 'dept' ? d.dept : this.stLabel(d.status);
+      const groups = [];
+      docs.forEach(d => { const k = keyOf(d); let g = groups.find(x => x.k === k); if (!g) { g = { k, items: [] }; groups.push(g); } g.items.push(d); });
+      groups.forEach(g => {
+        docRows.push({ isGroup: true, isDoc: false, label: g.k, count: g.items.length, trStyle: 'background:#eae9e9; padding:7px 0 7px 9px' });
+        g.items.forEach(d => docRows.push(mkDoc(d)));
+      });
+    }
+
+    const cols = [['num', t.col_num], ['author', t.col_author], ['ver', t.col_ver], ['status', t.col_status], ['date', t.col_date]];
+    const columns = cols.map(([k, label]) => ({
+      label, arrow: s.sortKey === k ? (s.sortDir === 'asc' ? '▲' : '▼') : '',
+      thStyle: 'flex:' + COL[k] + '; min-width:0; text-align:left; background:transparent; border:0; padding:0; font:inherit; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#605d5d; cursor:pointer; white-space:nowrap; overflow:hidden',
+      sort: () => this.setState({ sortKey: k, sortDir: s.sortKey === k && s.sortDir === 'desc' ? 'asc' : 'desc' })
+    }));
+
+    const sd = this.DOCS.find(d => d.id === s.selId) || this.DOCS[0];
+    const sb = this.badge(sd.status), sp = this.PEOPLE[sd.author];
+    const sel = {
+      num: sd.num, type: sd.type, title: sd.title, stLabel: this.stLabel(sd.status), stStyle: sb.pill, dotStyle: sb.dot,
+      meta: sp.short + ' · ' + sd.date + ' · ' + sd.ver + ' · ' + sd.dept,
+      docKind: sd.type === 'Рапорт' ? 'Рапорт' : sd.type,
+      addressee: 'Начальнику Департамента\nполковнику полиции\nЖумагулову Д. Т.',
+      body1: 'Прошу предоставить мне оплачиваемый ежегодный трудовой отпуск за 2026 год продолжительностью 29 календарных дней с 5 октября по 2 ноября 2026 года с выездом в город Алматы.',
+      body2: 'Исполнение обязанностей на период отпуска прошу возложить на инспектора отдела кадров капитана полиции Ким А. В. Материальную помощь к отпуску прошу начислить в установленном порядке.',
+      signer: sp.rank + '\n' + sp.short + '\n16.09.2026',
+      stamp: 'ДОКУМЕНТ ПОДПИСАН\nЭЦП УЦГО РК\n№ 2026-441802\n16.09.2026 09:14'
+    };
+
+    const tabs = [['view', t.tab_view], ['versions', t.tab_versions], ['files', t.tab_files], ['comments', t.tab_comments], ['links', t.tab_links], ['route', t.tab_route]].map(([id, label]) => ({
+      label, pick: () => this.set('tab', id),
+      style: 'background:' + (s.tab === id ? '#201e1d' : 'transparent') + '; color:' + (s.tab === id ? '#f3f2f2' : '#444141') + '; border:1px solid ' + (s.tab === id ? '#201e1d' : 'rgba(32,30,29,.16)') + '; border-radius:2px; font:inherit; font-size:12px; padding:6px 11px; cursor:pointer; margin:0 2px 2px 0'
+    }));
+
+    const routeData = [
+      ['done', 'Автор', this.PEOPLE.serikov.short, 'Подписано ЭЦП · 16.09.2026 09:14'],
+      ['done', 'Непосредственный руководитель', this.PEOPLE.abenova.short, 'Согласовано · 16.09.2026 14:02'],
+      ['now', 'Кадровая служба', this.PEOPLE.kim.short, 'На рассмотрении с 17.09.2026 · срок 19.09.2026'],
+      ['wait', 'Руководство департамента', this.PEOPLE.zhumagulov.short, 'Ожидает подписания приказа'],
+      ['wait', 'Регистрация и передача в 1С: Кадры', 'Автоматически', 'После подписания приказа']
+    ];
+    const mkRoute = arr => arr.map((r, i) => {
+      const n = this.node(r[0]);
+      return { role: r[1], name: r[2], result: r[3], nodeStyle: n.s, nodeIcon: n.i, lineStyle: 'flex:1; width:1px; background:' + (i === arr.length - 1 ? 'transparent' : '#bab6b6') };
+    });
+
+    const deadlines = [
+      ['Аттестация', '20.10.2026', '32 дня', false],
+      ['ВВК', '14.11.2026', '57 дней', false],
+      ['Полиграфологическое исследование', '03.12.2026', '76 дней', false],
+      ['Декларация о доходах', '31.03.2027', 'по графику', false],
+      ['Срок действия ЭЦП', '14.10.2026', '26 дней', true]
+    ].map(([label, date, left, warn]) => ({ label, date, left, style: 'font-size:11px; padding:3px 9px; border-radius:2px; flex:0 0 auto; background:' + (warn ? '#fff1f4' : '#eae7e7') + '; color:' + (warn ? '#790e3d' : '#2d2b2b') }));
+
+    const rap = [
+      ['Рапорт на ежегодный трудовой отпуск', 'РП-2026/412', 'Кадровая служба · 2 из 4 этапов', 'review'],
+      ['Рапорт на назначение (перемещение)', 'РП-2026/388', 'Приказ ПР-1164 зарегистрирован', 'signed'],
+      ['Рапорт на краткосрочный отпуск', 'РП-2026/402', 'Черновик, не отправлен', 'draft'],
+      ['Предложение: электронный журнал стрельб', 'ПЛ-118', 'Отклонено, доработать обоснование', 'rejected']
+    ].map(([title, num, step, st]) => { const b = this.badge(st); return { title, num, step, stLabel: this.stLabel(st), stStyle: b.pill, dotStyle: b.dot }; });
+
+    const courseData = [
+      { id: 'antikor', tag: 'Обязательный', tagKind: 'req', hours: '8 ак. часов', pct: 45, title: 'Основы противодействия коррупции. Требования антикоррупционного законодательства РК', note: 'Курс Службы противодействия коррупции КНБ РК совместно с Высшей школой права КАЗГЮУ. Доступ к следующему модулю открывается после завершения предыдущего.', imgNote: 'обложка курса', kicker: 'Обязательное обучение', about: 'Программа охватывает антикоррупционное законодательство РК, этические нормы, практические кейсы по выявлению и предотвращению коррупции, внутренние регламенты и порядок сообщения о коррупционных рисках.', langs: 'Қазақша · Русский', author: 'Служба противодействия коррупции КНБ РК', progressNote: '2 из 5 модулей' },
+      { id: 'comm', tag: 'Рекомендован', tagKind: 'opt', hours: '6 ак. часов', pct: 100, title: 'Обучение методам эффективной коммуникации', note: 'Курс на государственном и русском языках. По итогам тестирования формируется сертификат.', imgNote: 'обложка курса', kicker: 'Повышение квалификации', about: 'Навыки служебной коммуникации, работа с обращениями граждан, деэскалация конфликтов.', langs: 'Қазақша · Русский', author: 'Учебный центр департамента', progressNote: 'Завершён, сертификат выдан' },
+      { id: 'edoc', tag: 'Рекомендован', tagKind: 'opt', hours: '3 ак. часа', pct: 20, title: 'Электронный документооборот и работа с ЭЦП', note: 'Подписание, согласование, проверка подписи и работа с контейнером закрытого ключа.', imgNote: 'обложка курса', kicker: 'Повышение квалификации', about: 'Практика подписания документов ЭЦП УЦГО РК, проверка сертификатов и временных меток.', langs: 'Русский', author: 'Учебный центр департамента', progressNote: '1 из 4 модулей' },
+      { id: 'phys', tag: 'По графику', tagKind: 'opt', hours: '12 ак. часов', pct: 0, title: 'Профессиональная и служебная подготовка', note: 'Теоретическая часть перед сдачей контрольных упражнений и тестирования.', imgNote: 'обложка курса', kicker: 'Служебная подготовка', about: 'Нормативная часть подготовки, допуск к контрольным упражнениям.', langs: 'Қазақша · Русский', author: 'Отдел боевой подготовки', progressNote: 'Не начат' }
+    ];
+    const courses = courseData.map(c => ({
+      title: c.title, note: c.note, hours: c.hours, imgNote: c.imgNote, tag: c.tag, progressNote: c.progressNote,
+      tagStyle: 'font-size:11px; padding:3px 9px; border-radius:2px; background:' + (c.tagKind === 'req' ? '#fff1f4' : '#e9f8ff') + '; color:' + (c.tagKind === 'req' ? '#790e3d' : '#004961'),
+      barStyle: this.bar(c.pct, c.tagKind === 'req' ? '#d6006c' : '#0088b0'),
+      action: c.pct === 0 ? 'Начать' : c.pct === 100 ? 'Сертификат' : 'Продолжить',
+      btnStyle: 'background:' + (c.pct === 100 ? 'transparent' : '#0088b0') + '; color:' + (c.pct === 100 ? '#006786' : '#f3f2f2') + '; border:1px solid ' + (c.pct === 100 ? 'rgba(32,30,29,.16)' : '#0088b0') + '; border-radius:2px; font:inherit; font-size:13px; font-weight:600; padding:8px 13px; cursor:pointer',
+      open: () => this.setState({ course: c.id })
+    }));
+    const cur = courseData.find(c => c.id === s.course) || courseData[0];
+    const course = { kicker: cur.kicker, title: cur.title, about: cur.about, hours: cur.hours, langs: cur.langs, author: cur.author, pct: cur.pct, progressNote: cur.progressNote, barStyle: this.bar(cur.pct) };
+    const modules = [
+      ['done', 'Модуль 1. Антикоррупционное законодательство РК', 'Изучено · 12.09.2026', 'Повторить', false],
+      ['done', 'Модуль 2. Этические нормы и стандарты поведения', 'Изучено · 15.09.2026', 'Повторить', false],
+      ['now', 'Модуль 3. Практические кейсы выявления коррупции', 'Доступен · 4 из 9 разделов', 'Продолжить', false],
+      ['wait', 'Модуль 4. Внутренние регламенты и механизмы', 'Откроется после модуля 3', 'Недоступно', true],
+      ['wait', 'Итоговое тестирование', 'Требуется подтверждение ЭЦП', 'Недоступно', true]
+    ].map(([k, title, meta, action, locked]) => {
+      const n = this.node(k);
+      return { title, meta, action, locked, nodeStyle: n.s, nodeIcon: n.i, weight: k === 'now' ? 600 : 400,
+        btnStyle: 'flex:none; background:' + (k === 'now' ? '#0088b0' : 'transparent') + '; color:' + (k === 'now' ? '#f3f2f2' : locked ? '#7d7979' : '#006786') + '; border:1px solid ' + (k === 'now' ? '#0088b0' : 'rgba(32,30,29,.16)') + '; border-radius:2px; font:inherit; font-size:13px; font-weight:600; padding:8px 12px; cursor:' + (locked ? 'not-allowed' : 'pointer') + '; opacity:' + (locked ? '.45' : '1') };
+    });
+
+    const folders = [['orders', 'ph-scroll', 'Приказы', 46], ['regs', 'ph-books', 'Регламенты', 18], ['instr', 'ph-list-checks', 'Инструкции', 27], ['pos', 'ph-buildings', 'Положения', 12], ['lost', 'ph-archive', 'Утратившие силу', 9]];
+    const vndFolders = folders.map(([id, icon, label, count]) => ({
+      label, icon, count,
+      pick: () => this.set('vndFolder', id),
+      style: 'display:flex; align-items:center; gap:10px; width:100%; min-height:40px; padding:8px 11px; background:' + (s.vndFolder === id ? '#eae9e9' : 'transparent') + '; border:0; border-radius:2px; cursor:pointer; font:inherit; font-size:14px; font-weight:' + (s.vndFolder === id ? 600 : 400) + '; color:#201e1d'
+    }));
+    const vndDocs = [
+      ['Регламент электронного документооборота', 'ВНД-27 · v4', 'Параллельное согласование, 6 участников', 'Срок согласования до 19.09.2026', 'Руководство департамента', 'review', 'Ознакомлено 112 из 340'],
+      ['Инструкция по работе с ЭЦП УЦГО РК', 'ВНД-31 · v2', 'Последовательное согласование', 'Утверждён 02.09.2026', 'Управление кадровой работы', 'signed', 'Ознакомлено 298 из 340'],
+      ['Положение об отделе психологического обеспечения', 'ВНД-19 · v3', 'Группа согласующих, 4 участника', 'Утверждён 14.08.2026', 'Отдел психологического обеспечения', 'executed', 'Ознакомлено 340 из 340'],
+      ['Инструкция о порядке проведения стрельб', 'ВНД-44 · v1', 'Последовательное согласование', 'Просрочено на 2 дня — уведомления направлены', 'Отдел боевой подготовки', 'review', 'Ознакомлено 41 из 340'],
+      ['Регламент выдачи справок (утратил силу)', 'ВНД-08 · v5', 'Постановка на утрату 01.09.2026', 'Заменён ВНД-27', 'Управление кадровой работы', 'executed', 'Архив']
+    ].map(([title, num, mode, due, dept, st, readers], i) => {
+      const b = this.badge(st), done = !!s.read[i];
+      return { title, num, mode, due, dept, readers, stLabel: this.stLabel(st), stStyle: b.pill, dotStyle: b.dot,
+        readLabel: done ? 'Ознакомлен ✓' : 'Ознакомиться',
+        read: () => this.setState({ read: Object.assign({}, s.read, { [i]: !done }) }),
+        readStyle: 'background:' + (done ? '#cbeeff' : '#0088b0') + '; color:' + (done ? '#0a303e' : '#f3f2f2') + '; border:0; border-radius:2px; font:inherit; font-size:13px; font-weight:600; padding:8px 13px; cursor:pointer' };
+    });
+
+    const projects = [
+      ['Цифровизация журналов огневой подготовки', 'review', '30.11.2026', 'Оспанов Р. М.', '3 вехи', '11 задач', 40],
+      ['Перевод справок в электронный формат', 'signed', '15.10.2026', 'Абенова Г. С.', '2 вехи', '6 задач', 75],
+      ['Внедрение мобильного доступа к ВНД', 'draft', '20.12.2026', 'Ким А. В.', '4 вехи', '14 задач', 10]
+    ].map(([title, st, due, owner, milestones, tasks, pct]) => {
+      const b = this.badge(st);
+      return { title, due, owner, milestones, tasks, stLabel: this.stLabel(st), stStyle: b.pill, dotStyle: b.dot, barStyle: this.bar(pct) };
+    });
+
+    const notifications = [
+      ['ph-signature', 'Рапорт РП-2026/412 ожидает вашего согласования', '12 минут назад', 'Отпуск', true],
+      ['ph-seal-warning', 'Срок действия ЭЦП истекает через 26 дней', '2 часа назад', 'ЭЦП', true],
+      ['ph-books', 'ВНД-27 направлен на ознакомление, срок до 19.09.2026', 'Сегодня, 08:40', 'ВНД', false],
+      ['ph-graduation-cap', 'Открыт модуль 3 антикоррупционного курса', 'Вчера, 17:10', 'Академия', false],
+      ['ph-kanban', 'Запрос на продление срока по задаче «Форма журнала»', 'Вчера, 11:25', 'Проекты', false],
+      ['ph-first-aid-kit', 'Направление на ВВК подписано и получено', '16.09.2026', 'ВВК', false]
+    ].map(([icon, text, time, process, unread]) => ({ icon, text, time, process, rowStyle: 'padding:13px 0; border-bottom:1px solid rgba(32,30,29,.1); background:' + (unread ? 'transparent' : 'transparent') + '; opacity:' + (unread ? '1' : '.72') }));
+
+    const notifSettings = [['rapport', 'Рапорты и приказы'], ['sign', 'Согласование и подписание'], ['vnd', 'Ознакомление с ВНД'], ['academy', 'Академия и тестирование'], ['projects', 'Проекты и поручения']].map(([id, label]) => {
+      const on = s.notif[id];
+      return { label, toggle: () => this.setState({ notif: Object.assign({}, s.notif, { [id]: !on }) }),
+        style: 'width:44px; height:24px; flex:none; border:1px solid ' + (on ? '#0088b0' : 'rgba(32,30,29,.24)') + '; background:' + (on ? '#0088b0' : '#eae9e9') + '; border-radius:12px; cursor:pointer; padding:2px; display:flex; justify-content:' + (on ? 'flex-end' : 'flex-start'),
+        knob: 'width:18px; height:18px; border-radius:50%; background:#f3f2f2; display:block' };
+    });
+
+    const checks = [
+      ['ok', 'Цепочка доверия УЦГО РК', 'подтверждена'],
+      ['ok', 'Статус сертификата (CRL / OCSP)', 'действителен'],
+      ['warn', 'Срок действия сертификата', 'до 14.10.2026'],
+      ['ok', 'Временная метка TSP УЦГО РК', 'получена'],
+      ['ok', 'Формат подписи', 'CMS / PKCS#7']
+    ].map(([k, label, value]) => ({ label, value, mark: k === 'ok' ? '✓' : '!',
+      markStyle: 'width:18px; height:18px; flex:none; border-radius:50%; font-size:11px; display:grid; place-items:center; background:' + (k === 'ok' ? '#0088b0' : '#d6006c') + '; color:#f3f2f2',
+      valStyle: 'font-size:12px; color:' + (k === 'ok' ? '#444141' : '#790e3d') }));
+
+    const decisions = [['approve', 'Согласовать', 'Документ уходит следующему участнику маршрута'], ['remarks', 'Согласовать с замечаниями', 'Замечания фиксируются в листе согласования'], ['reject', 'Отклонить', 'Документ возвращается автору на доработку']].map(([id, label, note], i) => ({
+      label, note, pick: () => {}, dot: 'width:16px; height:16px; flex:none; border-radius:50%; border:1.5px solid ' + (i === 0 ? '#0088b0' : 'rgba(32,30,29,.24)') + '; background:' + (i === 0 ? '#0088b0' : 'transparent') + '; box-shadow:' + (i === 0 ? 'inset 0 0 0 3px #eae9e9' : 'none'),
+      style: 'display:flex; gap:11px; align-items:flex-start; width:100%; text-align:left; background:' + (i === 0 ? '#f3f2f2' : 'transparent') + '; border:1px solid ' + (i === 0 ? '#0088b0' : 'rgba(32,30,29,.16)') + '; border-radius:2px; padding:11px 13px; cursor:pointer; font:inherit'
+    }));
+
+    return {
+      t, me: Object.assign({}, me, { rating: 87, id: 'личный № 044718', tenure: '11 лет 4 месяца' }),
+      shellStyle: { position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, height: '100%', zoom: s.scale, filter: s.mono ? 'grayscale(1) contrast(1.08)' : 'none' },
+      navItems, roles, columns, docRows, sel, tabs,
+      query: s.query, onQuery: e => this.set('query', e.target.value),
+      groupBy: s.groupBy, onGroup: e => this.set('groupBy', e.target.value),
+      filterStatus: s.filterStatus, onFilter: e => this.set('filterStatus', e.target.value),
+      docCountLine: docs.length + ' из ' + this.DOCS.length + ' документов',
+      setRu: () => this.set('lang', 'ru'), setKz: () => this.set('lang', 'kz'),
+      ruBtn: 'background:' + (s.lang === 'ru' ? '#201e1d' : 'transparent') + '; color:' + (s.lang === 'ru' ? '#f3f2f2' : '#444141') + '; border:0; font:inherit; font-size:12px; font-weight:600; padding:8px 11px; cursor:pointer',
+      kzBtn: 'background:' + (s.lang === 'kz' ? '#201e1d' : 'transparent') + '; color:' + (s.lang === 'kz' ? '#f3f2f2' : '#444141') + '; border:0; font:inherit; font-size:12px; font-weight:600; padding:8px 11px; cursor:pointer; border-left:1px solid rgba(32,30,29,.16)',
+      cycleScale: () => this.set('scale', s.scale >= 1.3 ? 1 : s.scale === 1 ? 1.15 : 1.3),
+      toggleMono: () => this.set('mono', !s.mono),
+      scaleBtn: 'width:36px; height:36px; border-radius:2px; border:1px solid ' + (s.scale > 1 ? '#0088b0' : 'rgba(32,30,29,.16)') + '; background:' + (s.scale > 1 ? '#e9f8ff' : 'transparent') + '; color:' + (s.scale > 1 ? '#006786' : '#201e1d') + '; font:inherit; font-size:14px; font-weight:600; cursor:pointer',
+      monoBtn: 'width:36px; height:36px; border-radius:2px; border:1px solid ' + (s.mono ? '#0088b0' : 'rgba(32,30,29,.16)') + '; background:' + (s.mono ? '#e9f8ff' : 'transparent') + '; color:' + (s.mono ? '#006786' : '#201e1d') + '; font:inherit; font-size:15px; cursor:pointer',
+      bellBtn: 'position:relative; width:36px; height:36px; border-radius:2px; border:1px solid ' + (s.notifOpen ? '#0088b0' : 'rgba(32,30,29,.16)') + '; background:' + (s.notifOpen ? '#e9f8ff' : 'transparent') + '; color:#201e1d; cursor:pointer',
+      notifCount: 7, notifOpen: s.notifOpen, toggleNotif: () => this.set('notifOpen', !s.notifOpen),
+      notifications, notifSettings,
+      isDashboard: s.screen === 'dashboard', isDocuments: s.screen === 'documents', isRapports: s.screen === 'rapports',
+      isAcademy: s.screen === 'academy', isVnd: s.screen === 'vnd', isProjects: s.screen === 'projects', isMobile: s.screen === 'mobile',
+      isSpravki: s.screen === 'spravki', isIdeas: s.screen === 'ideas', isVvk: s.screen === 'vvk',
+      isJournals: s.screen === 'journals', isSurveys: s.screen === 'surveys',
+      isOrgstruct: s.screen === 'orgstruct', isSettings: s.screen === 'settings',
+      spravkiTypes: [
+        { icon: 'ph-briefcase', title: 'Справка с места работы', note: 'Должность, звание, период службы, денежное довольствие по запросу', source: '1С: Кадры' },
+        { icon: 'ph-users-three', title: 'Справка о составе семьи', note: 'По данным личного дела и сведениям кадровой службы', source: '1С: Кадры' },
+        { icon: 'ph-receipt', title: 'Расчётный листок', note: 'За выбранный месяц, с расшифровкой начислений и удержаний', source: '1С: Кадры' },
+        { icon: 'ph-scroll', title: 'Послужной список', note: 'Полная выписка о прохождении службы с датами приказов', source: '1С: Кадры' }
+      ],
+      spravkiIssued: [
+        { type: 'Справка с места работы', num: 'СП-9042', date: '14.09.2026', st: 'Готова', ready: true },
+        { type: 'Расчётный листок за август 2026', num: 'РЛ-2208', date: '02.09.2026', st: 'Готова', ready: true },
+        { type: 'Послужной список', num: 'ПС-1177', date: '18.09.2026', st: 'Формируется в 1С', ready: false }
+      ].map(x => Object.assign(x, { stStyle: 'font-size:11px; padding:4px 10px; border-radius:2px; background:' + (x.ready ? '#cbeeff' : '#f8f4f4') + '; color:' + (x.ready ? '#0a303e' : '#444141') })),
+      ideaServices: ['Управление кадровой работы', 'Отдел информационных технологий', 'Отдел боевой подготовки', 'Отдел психологического обеспечения'],
+      myIdeas: [
+        ['Электронный журнал стрельб вместо бумажного', 'ПЛ-118', 'Отдел боевой подготовки', 'Отклонено: требуется обоснование затрат', 'rejected'],
+        ['Автоматическое напоминание о сроке ЭЦП за 30 дней', 'ПЛ-124', 'Отдел информационных технологий', 'На рассмотрении, ответственный назначен', 'review'],
+        ['Единый шаблон рапорта на краткосрочный отпуск', 'ПЛ-097', 'Управление кадровой работы', 'Реализовано в версии 2.4', 'executed']
+      ].map(([title, num, service, result, st]) => { const b = this.badge(st); return { title, num, service, result, stLabel: this.stLabel(st), stStyle: b.pill, dotStyle: b.dot }; }),
+      vvkList: [
+        ['Сериков Н. Е.', 'ВВК-233', 'Плановое освидетельствование', '14.11.2026', 'Направление подписано, ознакомлен 12.09.2026', 'signed', 'Ожидается'],
+        ['Ким А. В.', 'ВВК-229', 'По окончании больничного', '02.09.2026', 'Пройдено 05.09.2026', 'executed', 'Годен'],
+        ['Оспанов Р. М.', 'ВВК-241', 'Плановое освидетельствование', '20.11.2026', 'Направление сформировано, не подписано', 'draft', '—']
+      ].map(([who, num, reason, date, state, st, concl]) => { const b = this.badge(st); return { who, num, reason, date, state, concl, stLabel: this.stLabel(st), stStyle: b.pill, dotStyle: b.dot }; }),
+      journals: [
+        ['Журнал учёта посещаемости занятий по огневой подготовке', 'III квартал 2026', 'Отдел боевой подготовки', '22 сотрудника', 'review'],
+        ['Журнал учёта посещаемости по физической подготовке и боевым приёмам борьбы', 'III квартал 2026', 'Отдел боевой подготовки', '22 сотрудника', 'signed'],
+        ['Итоговый протокол результатов сотрудников, подлежащих аттестации', 'IV квартал 2026', 'Управление кадровой работы', '34 сотрудника', 'draft'],
+        ['Ведомость учёта результатов выполнения контрольных упражнений', 'III квартал 2026', 'Патрульная служба', '195 сотрудников', 'executed'],
+        ['Протокол проверки уровня профессиональной, служебной и физической подготовки', 'III квартал 2026', 'Отдел следствия', '78 сотрудников', 'review']
+      ].map(([title, period, dept, staff, st]) => { const b = this.badge(st); return { title, period, dept, staff, stLabel: this.stLabel(st), stStyle: b.pill, dotStyle: b.dot }; }),
+      surveys: [
+        { title: 'Социологическое исследование: удовлетворённость условиями службы', kind: 'Социологическое', anon: 'Анонимно', period: '01.09 — 30.09.2026', done: '214 из 340', pct: 63, barStyle: this.bar(63), note: 'Аналитика по подразделениям, экспорт в XLSX' },
+        { title: 'Психолого-социологическое исследование в рамках плановой аттестации', kind: 'Психологическое', anon: 'Не анонимно, доступ у психолога', period: '15.09 — 10.10.2026', done: '46 из 340', pct: 14, barStyle: this.bar(14, '#d6006c'), note: 'Проходится на рабочей станции специалиста-психолога, обработка по шкалам интерпретации' },
+        { title: 'Внеплановая аттестация: отдел следствия', kind: 'Психологическое', anon: 'Не анонимно', period: 'Завершено 28.08.2026', done: '78 из 78', pct: 100, barStyle: this.bar(100), note: 'Отчёт сформирован, доступ разграничен' }
+      ],
+      orgTree: [
+        { level: 0, name: 'Департамент по городу Астана', head: 'Жумагулов Д. Т., полковник полиции', staff: '340' },
+        { level: 1, name: 'Управление кадровой работы', head: 'Абенова Г. С., подполковник полиции', staff: '34' },
+        { level: 2, name: 'Отдел кадров', head: 'Ким А. В., капитан полиции', staff: '12' },
+        { level: 2, name: 'Отдел психологического обеспечения', head: 'Оспанов Р. М., майор полиции', staff: '11' },
+        { level: 1, name: 'Отдел следствия', head: 'вакансия', staff: '78' },
+        { level: 1, name: 'Отдел боевой подготовки', head: 'Сериков Н. Е., майор полиции', staff: '22' },
+        { level: 1, name: 'Патрульная служба', head: 'назначается приказом ПР-1172', staff: '195' }
+      ].map(x => Object.assign(x, { style: 'display:flex; gap:14px; align-items:baseline; padding:11px 0 11px ' + (x.level * 26) + 'px; border-bottom:1px solid rgba(32,30,29,.08); font-weight:' + (x.level === 0 ? 600 : 400) })),
+      workGroups: [
+        { name: 'Рабочая группа по переходу на электронный документооборот', members: '9 участников', lead: 'Абенова Г. С.' },
+        { name: 'Комиссия по аттестации на IV квартал 2026', members: '6 участников', lead: 'Жумагулов Д. Т.' },
+        { name: 'Группа сопровождения антикоррупционного обучения', members: '4 участника', lead: 'Оспанов Р. М.' }
+      ],
+      processList: ['Отпуск', 'Назначение и перемещение', 'Увольнение', 'ВНД', 'Предложения', 'ВВК'],
+      processStages: [
+        { stage: '1. Регистрация', roles: 'Автор', decisions: 'Отправить, сохранить черновик', deadline: '—', status: 'Черновик → Зарегистрирован' },
+        { stage: '2. Согласование руководителем', roles: 'Непосредственный руководитель', decisions: 'Согласовать, с замечаниями, отклонить', deadline: '2 рабочих дня', status: 'На согласовании' },
+        { stage: '3. Проверка кадровой службой', roles: 'Кадровая служба', decisions: 'Согласовать, вернуть автору', deadline: '2 рабочих дня', status: 'На согласовании' },
+        { stage: '4. Подписание приказа', roles: 'Руководство департамента', decisions: 'Подписать ЭЦП, отклонить', deadline: '3 рабочих дня', status: 'Подписан' },
+        { stage: '5. Передача в 1С: Кадры', roles: 'Система', decisions: 'Автоматически', deadline: 'сразу', status: 'Исполнен' }
+      ],
+      isChief: s.role === 'chief', isHr: s.role === 'hr', showRating: this.props.showRating !== false,
+      goRapports: () => this.setState({ screen: 'rapports', rapportView: 'list' }),
+      goDocuments: () => this.set('screen', 'documents'),
+      goAcademy: () => this.setState({ screen: 'academy', course: null }),
+      goNewRapport: () => this.setState({ screen: 'rapports', rapportView: 'form' }),
+      backToRapports: () => this.setState({ rapportView: 'list' }),
+      submitRapport: e => { e.preventDefault(); this.setState({ rapportView: 'done' }); },
+      rapportList: s.rapportView === 'list', rapportForm: s.rapportView === 'form', rapportDone: s.rapportView === 'done',
+      ratingSegs: Array.from({ length: 10 }, (_, i) => ({ style: 'flex:1; height:9px; border-radius:1px; background:' + (i < 9 ? '#0088b0' : '#d7d3d3') })),
+      deadlines, myRapports: rap, mobileRapports: rap.slice(0, 3),
+      vacations: [
+        { type: 'Ежегодный трудовой', period: '05.10 — 02.11.2026', days: '29 дней' },
+        { type: 'Краткосрочный', period: '18.12 — 20.12.2026', days: '3 дня' },
+        { type: 'Учебный', period: '02.02 — 14.02.2027', days: '13 дней' }
+      ],
+      dashCourses: [
+        { title: 'Основы противодействия коррупции (обязательный)', pct: 45, barStyle: this.bar(45, '#d6006c') },
+        { title: 'Обучение методам эффективной коммуникации', pct: 100, barStyle: this.bar(100) },
+        { title: 'Электронный документооборот и ЭЦП', pct: 20, barStyle: this.bar(20) }
+      ],
+      chiefQueue: [
+        { title: 'Рапорт на ежегодный трудовой отпуск · РП-2026/412', author: 'Сериков Н. Е.', due: 'срок 19.09.2026', approve: () => this.setState({ screen: 'documents', selId: 1, modal: 'approve' }), open: () => this.setState({ screen: 'documents', selId: 1 }) },
+        { title: 'Регламент электронного документооборота · ВНД-27', author: 'Абенова Г. С.', due: 'срок 19.09.2026', approve: () => this.setState({ screen: 'documents', selId: 5, modal: 'approve' }), open: () => this.setState({ screen: 'documents', selId: 5 }) },
+        { title: 'Итоговый протокол результатов аттестации · АТ-77', author: 'Оспанов Р. М.', due: 'срок 22.09.2026', approve: () => this.setState({ screen: 'documents', selId: 9, modal: 'approve' }), open: () => this.setState({ screen: 'documents', selId: 9 }) },
+        { title: 'Ведомость по физической подготовке · ЖФ-63', author: 'Оспанов Р. М.', due: 'срок 25.09.2026', approve: () => this.setState({ screen: 'documents', selId: 10, modal: 'approve' }), open: () => this.setState({ screen: 'documents', selId: 10 }) }
+      ],
+      hrRows: [
+        { dept: 'Управление кадровой работы', staff: 34, rapports: 12, antikor: '91 %', vvk: 0 },
+        { dept: 'Отдел следствия', staff: 78, rapports: 26, antikor: '74 %', vvk: 3 },
+        { dept: 'Отдел боевой подготовки', staff: 22, rapports: 7, antikor: '68 %', vvk: 1 },
+        { dept: 'Отдел психологического обеспечения', staff: 11, rapports: 3, antikor: '100 %', vvk: 0 },
+        { dept: 'Патрульная служба', staff: 195, rapports: 61, antikor: '58 %', vvk: 9 }
+      ],
+      news: [
+        { kicker: 'Приказ', title: 'Об утверждении графика аттестации на IV квартал 2026 года', body: 'Приказ № ПР-1172 от 15.09.2026. Ознакомление обязательно для всех сотрудников подразделений.', date: '15.09.2026' },
+        { kicker: 'Новость', title: 'Электронные справки теперь формируются за минуту', body: 'Справка с места работы, о составе семьи, расчётный листок и послужной список доступны в разделе «Справки».', date: '12.09.2026' },
+        { kicker: 'Объявление', title: 'Плановое обслуживание сервиса ЭЦП 21 сентября', body: 'С 22:00 до 23:30 подписание документов будет недоступно. Согласование сохранится в черновиках.', date: '11.09.2026' }
+      ],
+      rapportTypes: [
+        { icon: 'ph-sun-horizon', title: 'Рапорт на отпуск', note: 'Ежегодный, краткосрочный, учебный, по уходу за ребёнком и другие виды', open: () => this.setState({ screen: 'rapports', rapportView: 'form', rapportKind: 'vacation' }) },
+        { icon: 'ph-arrows-left-right', title: 'Назначение и перемещение', note: 'С автоматическим формированием проекта приказа из 1С: Кадры', open: () => this.setState({ screen: 'rapports', rapportView: 'form', rapportKind: 'appoint' }) },
+        { icon: 'ph-door-open', title: 'Увольнение', note: 'Регистрация рапорта, маршрут согласования, приказ', open: () => this.setState({ screen: 'rapports', rapportView: 'form', rapportKind: 'dismiss' }) },
+        { icon: 'ph-lightbulb', title: 'Предложение', note: 'Площадка предложений: маршрутизация и отслеживание рассмотрения', open: () => this.setState({ screen: 'ideas' }) }
+      ],
+      formVacation: (s.rapportKind || 'vacation') === 'vacation',
+      formAppoint: s.rapportKind === 'appoint',
+      formDismiss: s.rapportKind === 'dismiss',
+      formTitle: s.rapportKind === 'appoint' ? t.form_title_appoint : s.rapportKind === 'dismiss' ? t.form_title_dismiss : t.form_title,
+      dismissReasons: ['По собственному желанию', 'По выслуге лет, дающей право на пенсию', 'По состоянию здоровья на основании заключения ВВК', 'В связи с переводом в другой государственный орган'],
+      appointPositions: ['Заместитель начальника отдела кадров', 'Старший инспектор отдела следствия', 'Начальник отделения боевой подготовки'],
+      vacationKinds: [
+        { value: 'annual', label: 'Оплачиваемый ежегодный трудовой отпуск' },
+        { value: 'short', label: 'Краткосрочный отпуск' },
+        { value: 'study', label: 'Учебный отпуск' },
+        { value: 'study_nopay', label: 'Учебный отпуск без сохранения довольствия' },
+        { value: 'birth', label: 'Отпуск в связи с беременностью и рождением ребёнка' },
+        { value: 'care', label: 'Отпуск по уходу за ребёнком до трёх лет' }
+      ],
+      form: s.form,
+      onFormType: e => this.setState({ form: Object.assign({}, s.form, { type: e.target.value }) }),
+      onFormFrom: e => this.setState({ form: Object.assign({}, s.form, { from: e.target.value }) }),
+      onFormTo: e => this.setState({ form: Object.assign({}, s.form, { to: e.target.value }) }),
+      onFormDays: e => this.setState({ form: Object.assign({}, s.form, { days: e.target.value }) }),
+      onFormPlace: e => this.setState({ form: Object.assign({}, s.form, { place: e.target.value }) }),
+      onFormSub: e => this.setState({ form: Object.assign({}, s.form, { substitute: e.target.value }) }),
+      onFormReason: e => this.setState({ form: Object.assign({}, s.form, { reason: e.target.value }) }),
+      route: mkRoute(routeData), formRoute: mkRoute([
+        ['now', 'Автор', this.PEOPLE.serikov.short, 'Подписать ЭЦП при отправке'],
+        ['wait', 'Непосредственный руководитель', this.PEOPLE.abenova.short, 'Согласование, срок 2 рабочих дня'],
+        ['wait', 'Кадровая служба', this.PEOPLE.kim.short, 'Проверка остатка дней и графика'],
+        ['wait', 'Руководство департамента', this.PEOPLE.zhumagulov.short, 'Подписание приказа ЭЦП']
+      ]),
+      doneSteps: mkRoute([
+        ['done', 'Регистрация', 'Автоматически', 'РП-2026/431 · 18.09.2026 10:02'],
+        ['now', 'Непосредственный руководитель', this.PEOPLE.abenova.short, 'На согласовании, срок 22.09.2026'],
+        ['wait', 'Кадровая служба', this.PEOPLE.kim.short, 'Ожидает'],
+        ['wait', 'Приказ', 'ПР-1181 (проект)', 'Формируется из 1С: Кадры после согласования']
+      ]),
+      versions: [
+        { ver: 'v4', note: 'Уточнён период отпуска и замещающий сотрудник', author: 'Сериков Н. Е.', date: '16.09.2026' },
+        { ver: 'v3', note: 'Добавлено вложение: график отпусков', author: 'Сериков Н. Е.', date: '15.09.2026' },
+        { ver: 'v2', note: 'Замечания кадровой службы устранены', author: 'Ким А. В.', date: '14.09.2026' },
+        { ver: 'v1', note: 'Первая редакция', author: 'Сериков Н. Е.', date: '12.09.2026' }
+      ],
+      files: [
+        { icon: 'ph-file-doc', name: 'График отпусков 2026.docx', size: '412 КБ' },
+        { icon: 'ph-file-pdf', name: 'Выписка из приказа ПР-1042.pdf', size: '1,2 МБ' },
+        { icon: 'ph-file-xls', name: 'Остатки дней отпуска.xlsx', size: '86 КБ' }
+      ],
+      comments: [
+        { author: 'Абенова Г. С.', date: '16.09.2026 14:05', text: 'Согласовано. Проверьте, что замещающий сотрудник не в отпуске в этот же период.' },
+        { author: 'Ким А. В.', date: '17.09.2026 09:12', text: 'Остаток дней подтверждён по данным 1С: Кадры — 29 дней.' }
+      ],
+      links: [
+        { kind: 'Является основанием для', title: 'Приказ о предоставлении отпуска ПР-1180 (проект)', meta: 'Формируется из 1С: Кадры · ожидает подписания' },
+        { kind: 'Связан с входящим', title: 'График отпусков подразделения на 2026 год', meta: 'ВНД-12 · утверждён 20.12.2025' }
+      ],
+      courses, course, modules, courseOpen: !!s.course, courseCatalog: !s.course,
+      closeCourse: () => this.set('course', null),
+      vndFolders, vndDocs, projects,
+      protocol: { kicker: 'Протокольное поручение', title: 'Протокольное поручение № 14 от 02.09.2026', note: 'Автоматизация учёта занятий и перевод журналов подготовки в электронный вид.', status: 'На исполнении', author: 'Жумагулов Д. Т.', due: '30.12.2026' },
+      zoom: s.zoom, zoomIn: () => this.set('zoom', Math.min(150, s.zoom + 25)), zoomOut: () => this.set('zoom', Math.max(50, s.zoom - 25)),
+      sheetStyle: { width: '100%', background: '#f8f4f4', padding: '26px 24px', transform: 'scale(' + (s.zoom / 100) + ')', transformOrigin: 'top left', whiteSpace: 'pre-line', boxShadow: '0 1px 2px rgba(45,43,43,.14)' },
+      tabView: s.tab === 'view', tabVersions: s.tab === 'versions', tabFiles: s.tab === 'files',
+      tabComments: s.tab === 'comments', tabLinks: s.tab === 'links', tabRoute: s.tab === 'route',
+      checks, decisions, signResult: [
+        { k: 'Документ', v: sd.num + ' · ' + sd.title },
+        { k: 'Файл подписи', v: 'Сериков Нурлан Ерболатович.sign' },
+        { k: 'Формат', v: 'CMS / PKCS#7, метка времени TSP' },
+        { k: 'Сертификат', v: 'УЦГО РК · № 2026-441802' },
+        { k: 'Дата и время', v: '18.09.2026 10:14:32 (UTC+5)' }
+      ],
+      modalTest: s.modal === 'test', modalTestDone: s.modal === 'testDone',
+      openTest: () => this.set('modal', 'test'), finishTest: () => this.set('modal', 'testDone'),
+      testQuestions: [
+        { n: 'Вопрос 1 из 12', q: 'Какой орган выдаёт электронный сертификат по итогам антикоррупционного курса?', a: ['Служба противодействия коррупции КНБ РК', 'Кадровая служба департамента', 'Высшая школа права КАЗГЮУ'] },
+        { n: 'Вопрос 2 из 12', q: 'Что относится к коррупционному риску в служебной деятельности?', a: ['Принятие подарка от заинтересованного лица', 'Обращение к руководителю с рапортом', 'Прохождение планового ВВК'] }
+      ].map((x, i) => ({ n: x.n, q: x.q, answers: x.a.map((label, j) => ({ label, dot: 'width:16px; height:16px; flex:none; border-radius:50%; border:1.5px solid ' + (i === 0 && j === 0 ? '#0088b0' : 'rgba(32,30,29,.24)') + '; background:' + (i === 0 && j === 0 ? '#0088b0' : 'transparent') + '; box-shadow:' + (i === 0 && j === 0 ? 'inset 0 0 0 3px #eae9e9' : 'none'), style: 'display:flex; gap:11px; align-items:center; width:100%; text-align:left; background:transparent; border:1px solid ' + (i === 0 && j === 0 ? '#0088b0' : 'rgba(32,30,29,.16)') + '; border-radius:2px; padding:10px 12px; cursor:pointer; font:inherit; font-size:14px; margin-bottom:8px' })) })),
+      modalOpen: !!s.modal, modalApprove: s.modal === 'approve', modalSign: s.modal === 'sign',
+      modalSigned: s.modal === 'signed', modalReject: s.modal === 'reject',
+      openApprove: () => this.set('modal', 'approve'), openSign: () => this.set('modal', 'sign'),
+      openReject: () => this.set('modal', 'reject'), toSign: () => this.set('modal', 'sign'),
+      doSign: () => this.set('modal', 'signed'), closeModal: () => this.set('modal', null),
+      personCard: !!s.person, person: s.person || {},
+      hoverOut: () => this.set('person', null),
+      personStyle: { position: 'fixed', left: Math.min(s.px + 14, 900) + 'px', top: (s.py + 14) + 'px', width: '300px', background: '#f3f2f2', borderRadius: '2px', boxShadow: '0 12px 32px rgba(45,43,43,.22)', padding: '14px', zIndex: 50, pointerEvents: 'none' },
+      mobileTabs: [['ph-identification-card', 'Кабинет', true], ['ph-folders', 'Документы', false], ['ph-file-text', 'Рапорты', false], ['ph-graduation-cap', 'Академия', false], ['ph-dots-three', 'Ещё', false]].map(([icon, label, on]) => ({
+        icon, label, style: 'flex:1; min-height:52px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:' + (on ? '#006786' : '#605d5d') + '; font-weight:' + (on ? 600 : 400)
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
